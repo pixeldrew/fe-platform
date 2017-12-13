@@ -5,6 +5,7 @@ const processors = require('./postcss/processors').processors;
 const path = require('path');
 const postcssReporter = require('postcss-reporter');
 const pm = require('postcss-middleware');
+const PORT = process.env.PORT || 3033;
 
 const postcssMiddleware = pm({
     inlineSourcemaps: true,
@@ -23,4 +24,4 @@ app.use( `/css`, postcssMiddleware );
 
 const server = require( 'http' ).createServer( app );
 
-server.listen( 9393 );
+server.listen( PORT );
