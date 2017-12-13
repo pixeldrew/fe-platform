@@ -1,0 +1,21 @@
+:root {
+
+    --font-h1: 'Times New Roman';
+    --color-primary1: 'black';
+
+    --style-h1 {
+        font-family: var(--font-h1);
+        font-size: 28px;
+        line-height: 32.5px;
+        letter-spacing: 0;
+        text-transform: capitalize;
+        color: var(--color-primary1);
+        font-weight: normal;
+
+    };
+
+}
+
+.test {
+    @apply --style-h1;
+}

@@ -1,0 +1,10 @@
+@import "cssnext-parent/css/index.css";
+
+:root {
+    --font-h2: 'Arial'
+}
+
+.test2 {
+    @apply --style-h1;
+    font-family: var(--font-h2);
+}
