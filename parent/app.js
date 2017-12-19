@@ -1,27 +1,113 @@
+require('module-alias/register');
+require('ignore-styles').default(['.css']);
 
-const express = require('express');
-const processors = require('./postcss/processors').processors;
-
-const path = require('path');
-const postcssReporter = require('postcss-reporter');
-const pm = require('postcss-middleware');
 const PORT = process.env.PORT || 3033;
 
-const postcssMiddleware = pm({
-    inlineSourcemaps: true,
-    src: (req) => {
-        return path.join(`css`, req.url);
-    },
-    plugins: [
-        ...processors,
-        postcssReporter({clearReportedMessages: true})
-    ]
-});
+const express = require('express');
+const babel = require('babel-core');
+const ReactDOMServer = require('react-dom/server');
+
+const webpack = require('webpack');
+const wpMiddleware = require('webpack-dev-middleware');
+const wpConfig = require('./webpack.config');
+const wpHotMiddleware = require('webpack-hot-middleware');
+
+const chokidar = require('chokidar');
+const path = require('path');
+const fs = require('fs-extra');
+const mkdirp = require('mkdirp');
+const clearRequire = require('clear-require');
 
 const app = express();
+const wpCompiler = webpack(wpConfig);
 
-app.use( `/css`, postcssMiddleware );
+app.use(wpMiddleware(wpCompiler, {
+    serverSideRender: true,
+    noInfo: true
+}));
 
-const server = require( 'http' ).createServer( app );
+app.use(wpHotMiddleware(wpCompiler));
 
-server.listen( PORT );
+app.use('/components/:componentId', (req, res) => {
+
+    try {
+        const module = require(`./dist/components/${ req.params.componentId }`).default;
+
+        res.send(ReactDOMServer.renderToStaticMarkup(module()));
+    }
+    catch (e) {
+        res.sendStatus(500);
+
+        console.warn(e);
+    }
+
+});
+
+app.use( '/etc/designs/carnival/', express.static( path.resolve( __dirname, 'dist' ) ) );
+
+function normalizeAssets(assets) {
+    return Array.isArray(assets) ? assets : [assets]
+}
+
+
+app.use('/template/:templateName', (req, res) => {
+
+    const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
+
+    const templateRe = new RegExp(`${req.params.templateName}\\.js\$`);
+
+    console.log(assetsByChunkName, templateRe, templateRe.test('home.j')) ;
+
+    const scripts = Object.entries(assetsByChunkName)
+        .map(([key, path]) => ([key, normalizeAssets(path)]))
+        .map(([key, path]) => (path.map((p) => `<script src="/${p}"></script>`).join('\n')))
+        .join('');
+        //
+
+    // then use `assetsByChunkName` for server-side rendering
+    res.send(`
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+		
+  </head>
+  <body>
+  <div id='main'></div>
+    ${scripts}
+  </body>
+</html>
+  `)
+
+});
+
+const server = require('http').createServer(app);
+
+server.listen(PORT);
+
+// Setup babel transform on components for use with SSR
+chokidar.watch('components/**/*.js').on('all', (event, filePath) => {
+
+    const code = babel.transformFileSync(filePath, {
+        presets: [['env', {targets: {node: '6.10'}}]]
+    }).code;
+    const outputPath = path.resolve(__dirname, 'dist', filePath);
+
+    mkdirp.sync(path.dirname(outputPath));
+
+    fs.writeFile(outputPath, code, (err) => {
+        if (err) throw err;
+        clearRequire(outputPath.replace(/\.js$/, ''));
+    });
+});
+
+// copy json to output
+chokidar.watch('components/**/*.json').on('all', (event, filePath) => {
+    const outputPath = path.resolve(__dirname, 'dist', filePath);
+
+    mkdirp.sync(path.dirname(outputPath));
+
+    fs.copySync(filePath, outputPath);
+
+    clearRequire(outputPath.replace(/\.json$/, ''));
+});

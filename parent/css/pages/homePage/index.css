@@ -1,0 +1,7 @@
+@import '../../index.css';
+
+.homePage {
+    @apply --style-h1;
+
+    background: url('../../../assets/images/check.png');
+}
