@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const outputComponent = ({Component, properties}, i) => {
 
@@ -9,6 +10,10 @@ const outputComponent = ({Component, properties}, i) => {
     );
 };
 
+outputComponent.propTypes = {
+    Component: PropTypes.element.isRequired,
+    properties: PropTypes.object.isRequired
+};
 
 const Page = ({headComponents, bodyComponents}) => (
     <div className="wrapper">
@@ -18,5 +23,10 @@ const Page = ({headComponents, bodyComponents}) => (
         {bodyComponents.map(outputComponent)}
     </div>
 );
+
+Page.propTypes = {
+    headComponents: PropTypes.array.isRequired,
+    bodyComponents: PropTypes.array.isRequired
+};
 
 export default Page;

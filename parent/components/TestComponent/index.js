@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const TestComponent = ({message}) => (
-    <div className={`title`}>{message} what is up? will this work?</div>
+    <div className={`title hello`}>{message}</div>
 );
+
+TestComponent.propTypes = {
+    message: PropTypes.string.isRequired
+};
 
 export default TestComponent;

@@ -1,11 +1,11 @@
 import React from 'react';
 import renderReact from '../utils/renderReact';
 
-import 'css/pages/homePage/index.css';
+import 'css/pages/aboutUsPage/index.css';
 
-import {TestComponent} from 'carnival';
+import {ParentComponent} from 'carnival';
 
-const home = {
+const aboutUsPage = {
     init() {
         this.initUI();
     },
@@ -24,8 +24,8 @@ const home = {
 
             const headComponents = [];
             const bodyComponents = [{
-                Component: TestComponent,
-                properties: {attributes: {message: 'yo'}, component: 'TestComponent'}
+                Component: ParentComponent,
+                properties: {attributes: {message: 'yo'}, component: 'ParentComponent'}
             }];
 
             render(
@@ -34,19 +34,19 @@ const home = {
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(TestComponent, 'testComponent');
+            renderReact(ParentComponent, 'parentComponent');
         }
     }
 
 };
 
-home.init();
+aboutUsPage.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
     module.hot.accept(['components/Page', 'carnival'], () => {
-        home.init();
+        aboutUsPage.init();
     });
 }
 
-export default home;
+export default aboutUsPage;

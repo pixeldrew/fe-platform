@@ -1,0 +1,11 @@
+"extends":
+- "walmart/configurations/es6-react"
+
+"rules":
+  "quotes":
+    - "error"
+    - "single"
+    - allowTemplateLiterals: true
+
+"env":
+  "browser": true

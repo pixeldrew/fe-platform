@@ -1,3 +1,5 @@
+/*eslint-env node */
+
 require('module-alias/register');
 require('ignore-styles').default(['.css']);
 
@@ -34,8 +36,7 @@ app.use('/components/:componentId', (req, res) => {
         const module = require(`./dist/components/${ req.params.componentId }`).default;
 
         res.send(ReactDOMServer.renderToStaticMarkup(module()));
-    }
-    catch (e) {
+    } catch (e) {
         res.sendStatus(500);
 
         console.warn(e);
@@ -43,41 +44,35 @@ app.use('/components/:componentId', (req, res) => {
 
 });
 
-app.use( '/etc/designs/carnival/', express.static( path.resolve( __dirname, 'dist' ) ) );
+app.use('/etc/designs/carnival/', express.static(path.resolve(__dirname, 'dist')));
 
-function normalizeAssets(assets) {
-    return Array.isArray(assets) ? assets : [assets]
-}
-
+const normalizeAssets = assets => {
+    return Array.isArray(assets) ? assets : [assets];
+};
 
 app.use('/template/:templateName', (req, res) => {
 
     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
 
-    const templateRe = new RegExp(`${req.params.templateName}\\.js\$`);
-
-    console.log(assetsByChunkName, templateRe, templateRe.test('home.j')) ;
-
     const scripts = Object.entries(assetsByChunkName)
-        .map(([key, path]) => ([key, normalizeAssets(path)]))
-        .map(([key, path]) => (path.map((p) => `<script src="/${p}"></script>`).join('\n')))
+        .map(([k, p]) => ([k, normalizeAssets(p)]))
+        .filter(([k, p]) => p.indexOf(`js/mediators/${req.params.templateName}.js`) + 1)
+        .map(([k, p]) => (p.map(p1 => `<script data-webkit-id="${k}" src="/${p1}"></script>`).join('\n')))
         .join('');
-        //
 
-    // then use `assetsByChunkName` for server-side rendering
     res.send(`
 <!DOCTYPE html>
 <html>
   <head>
     <title></title>
-		
+	<script>var SR = {components:{data:[]}};</script>
   </head>
   <body>
   <div id='main'></div>
     ${scripts}
   </body>
 </html>
-  `)
+  `);
 
 });
 
@@ -95,7 +90,7 @@ chokidar.watch('components/**/*.js').on('all', (event, filePath) => {
 
     mkdirp.sync(path.dirname(outputPath));
 
-    fs.writeFile(outputPath, code, (err) => {
+    fs.writeFile(outputPath, code, err => {
         if (err) throw err;
         clearRequire(outputPath.replace(/\.js$/, ''));
     });
