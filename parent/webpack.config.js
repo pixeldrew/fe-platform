@@ -26,6 +26,11 @@ let entry = {
     'js/mediators/aboutUsPage': [path.resolve(__dirname, 'js', 'mediators', 'aboutUsPage')]
 };
 
+entry = Object.entries(entry).map(([key, value]) => [key, ['babel-polyfill', ...value]]).reduce((a, v) => {
+    a[v[0]] = v[1];
+    return a;
+}, {});
+
 if (isDevelop) {
     entry = Object.entries(entry).map(([key, value]) => [key, ['react-hot-loader/patch', 'webpack-hot-middleware/client', ...value]]).reduce((a, v) => {
         a[v[0]] = v[1];
@@ -42,7 +47,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
-        filename: '[name].js'
+        filename: '[name].js',
+        chunkFilename: 'js/[name].js'
     },
 
     resolve: {
@@ -141,10 +147,10 @@ module.exports = {
 
         isDevelop ? new webpack.NoEmitOnErrorsPlugin() : null,
 
-        // isDevelop ? null : new webpack.optimize.AggressiveMergingPlugin({
-        //     minSizeReduce: 2,
-        //     moveToParents: true
-        // }),
+        isDevelop ? null : new webpack.optimize.AggressiveMergingPlugin({
+            minSizeReduce: 2,
+            moveToParents: true
+        }),
 
         ...extractBundles([
             {name: 'js/vendor', minChunks: ({resource}) => /node_modules/.test(resource)},
@@ -155,18 +161,16 @@ module.exports = {
             allChunks: true,
             filename (getPath) {
 
-                console.log('extracting ', getPath('css/[name].css'));
-
-                return getPath('css/[name].css').replace('css/js/mediators', 'css/pages').replace('js/common', 'css/common');
+                return getPath('css/[name].css').replace('css/js/mediators', 'css/pages');
             }
         }),
 
 
-        // isDevelop ? null : new OptimizeCssAssetsPlugin({
-        //     cssProcessor: require('cssnano'),
-        //     cssProcessorOptions: {discardComments: {removeAll: true}},
-        //     canPrint: true
-        // }),
+        isDevelop ? null : new OptimizeCssAssetsPlugin({
+            cssProcessor: require('cssnano'),
+            cssProcessorOptions: {discardComments: {removeAll: true}},
+            canPrint: true
+        }),
 
         isDevelop ? null : new webpack.optimize.UglifyJsPlugin()
 
