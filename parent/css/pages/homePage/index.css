@@ -1,8 +1,3 @@
-@import '../../index.css';
-@import '../../components/TestComponent/index.css';
-
 .homePage {
-    @apply --style-h1;
-
     background: url('../../../assets/images/check.png');
 }

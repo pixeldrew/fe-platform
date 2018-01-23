@@ -3,9 +3,9 @@ import renderReact from '../utils/renderReact';
 
 import 'css/pages/homePage/index.css';
 
-import {TestComponent} from 'carnival';
+import {Child} from 'carnival';
 
-const home = {
+const mediator = {
     init() {
         this.initUI();
     },
@@ -24,8 +24,8 @@ const home = {
 
             const headComponents = [];
             const bodyComponents = [{
-                Component: TestComponent,
-                properties: {attributes: {message: 'yo'}, component: 'TestComponent'}
+                Component: Child,
+                properties: {attributes: {message: 'this is the home page'}, component: 'Child'}
             }];
 
             render(
@@ -34,19 +34,17 @@ const home = {
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(TestComponent, 'testComponent');
+            renderReact(Child, 'child');
         }
     }
 
 };
 
-home.init();
+mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
     module.hot.accept(['components/Page', 'carnival'], () => {
-        home.init();
+        mediator.init();
     });
 }
-
-export default home;

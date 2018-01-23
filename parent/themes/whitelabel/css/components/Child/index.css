@@ -1,0 +1,5 @@
+.child {
+    font-size: 70px;
+    color: var(--color-primary1);
+    font-family: var(--font-h1);
+}

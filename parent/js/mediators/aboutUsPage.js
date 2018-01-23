@@ -3,9 +3,9 @@ import renderReact from '../utils/renderReact';
 
 import 'css/pages/aboutUsPage/index.css';
 
-import {ParentComponent} from 'carnival';
+import {Parent, Child} from 'carnival';
 
-const aboutUsPage = {
+const mediator = {
     init() {
         this.initUI();
     },
@@ -23,10 +23,16 @@ const aboutUsPage = {
             const Page = require('components/Page').default;
 
             const headComponents = [];
-            const bodyComponents = [{
-                Component: ParentComponent,
-                properties: {attributes: {message: 'yo'}, component: 'ParentComponent'}
-            }];
+            const bodyComponents = [
+                {
+                    Component: Parent,
+                    properties: {attributes: {message: 'this is the about us page'}, component: 'Parent'}
+                },
+                {
+                    Component: Child,
+                    properties: {attributes: {message: 'a second child'}, component: 'Child'}
+                }
+            ];
 
             render(
                 <AppContainer>
@@ -34,19 +40,17 @@ const aboutUsPage = {
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(ParentComponent, 'parentComponent');
+            renderReact(Parent, 'parent');
         }
     }
 
 };
 
-aboutUsPage.init();
+mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
     module.hot.accept(['components/Page', 'carnival'], () => {
-        aboutUsPage.init();
+        mediator.init();
     });
 }
-
-export default aboutUsPage;

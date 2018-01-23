@@ -1,4 +1,5 @@
-import TestComponent from './TestComponent';
-import ParentComponent from './ParentComponent';
+import Child from './Child';
+import Parent from './Parent';
+import Unused from './Unused';
 
-export { TestComponent, ParentComponent };
+export { Child, Parent, Unused };

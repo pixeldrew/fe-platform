@@ -5,10 +5,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 
-const postcssPlugins = require('./postcss/processors').processors;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env;
+
+const NODE_ENV = ENV.NODE_ENV || 'development';
 
 const isDevelop = NODE_ENV === 'development';
+
+const BRAND = ENV.BRAND || 'whitelabel';
+
+const THEME_LOCATION = path.resolve(__dirname, 'themes', BRAND);
+
+const postcssPlugins = require('./postcss/processors').processors(THEME_LOCATION);
 
 const extractBundles = bundles => (
     isDevelop ? [] : bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
@@ -43,7 +50,8 @@ module.exports = {
             carnival$: path.resolve(__dirname, 'components', 'index.js'),
             components: path.resolve(__dirname, 'components'),
             css: path.resolve(__dirname, 'css'),
-            assets: path.resolve(__dirname, 'assets')
+            assets: path.resolve(__dirname, 'assets'),
+            theme: path.resolve(__dirname, 'themes', BRAND)
         }
     },
 
@@ -105,7 +113,8 @@ module.exports = {
             {
                 test: /\.css$/,
                 include: [
-                    path.resolve(__dirname, 'css')
+                    path.resolve(__dirname, 'css'),
+                    path.resolve(THEME_LOCATION, 'css')
                 ],
                 use: isDevelop ? [
                     {loader: 'style-loader', options: {sourceMap: true}},
@@ -132,26 +141,35 @@ module.exports = {
 
         isDevelop ? new webpack.NoEmitOnErrorsPlugin() : null,
 
+        // isDevelop ? null : new webpack.optimize.AggressiveMergingPlugin({
+        //     minSizeReduce: 2,
+        //     moveToParents: true
+        // }),
+
         ...extractBundles([
             {name: 'js/vendor', minChunks: ({resource}) => /node_modules/.test(resource)},
             {name: 'js/common', minChunks: 2}
         ]),
 
-        isDevelop ? null : new webpack.optimize.AggressiveMergingPlugin({
-            minSizeReduce: 2,
-            moveToParents: true
-        }),
         isDevelop ? null : new ExtractTextPlugin({
+            allChunks: true,
             filename (getPath) {
-                return getPath('css/[name].css').replace('css/js/mediators', 'css/pages');
+
+                console.log('extracting ', getPath('css/[name].css'));
+
+                return getPath('css/[name].css').replace('css/js/mediators', 'css/pages').replace('js/common', 'css/common');
             }
         }),
-        isDevelop ? null : new OptimizeCssAssetsPlugin({
-            cssProcessor: require('cssnano'),
-            cssProcessorOptions: {discardComments: {removeAll: true}},
-            canPrint: true
-        }),
+
+
+        // isDevelop ? null : new OptimizeCssAssetsPlugin({
+        //     cssProcessor: require('cssnano'),
+        //     cssProcessorOptions: {discardComments: {removeAll: true}},
+        //     canPrint: true
+        // }),
+
         isDevelop ? null : new webpack.optimize.UglifyJsPlugin()
+
     ].filter(p => p),
     stats: {
         usedExports: true,
