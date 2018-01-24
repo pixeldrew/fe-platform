@@ -5,6 +5,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 
+const MAX_MODULES = 2;
+
 const ENV = process.env;
 
 const NODE_ENV = ENV.NODE_ENV || 'development';
@@ -20,6 +22,8 @@ const postcssPlugins = require('./postcss/processors').processors(THEME_LOCATION
 const extractBundles = bundles => (
     isDevelop ? [] : bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
 );
+
+const isVendor = ({resource}) => /node_modules/.test(resource);
 
 let entry = {
     'js/mediators/home': [path.resolve(__dirname, 'js', 'mediators', 'home')],
@@ -153,18 +157,17 @@ module.exports = {
         }),
 
         ...extractBundles([
-            {name: 'js/vendor', minChunks: ({resource}) => /node_modules/.test(resource)},
-            {name: 'js/common', minChunks: 2}
+            {name: 'js/common', minChunks: (module, count) => count >= MAX_MODULES},
+            {name: 'js/vendor', minChunks: isVendor}
         ]),
 
         isDevelop ? null : new ExtractTextPlugin({
             allChunks: true,
-            filename (getPath) {
+            filename(getPath) {
 
-                return getPath('css/[name].css').replace('css/js/mediators', 'css/pages');
+                return getPath('css/[name].css').replace('css/js/', 'css/').replace('mediators', 'pages');
             }
         }),
-
 
         isDevelop ? null : new OptimizeCssAssetsPlugin({
             cssProcessor: require('cssnano'),
@@ -181,3 +184,4 @@ module.exports = {
         entrypoints: true
     }
 };
+
