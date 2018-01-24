@@ -1,0 +1,5 @@
+# common bundling works for css
+@ webpack bundle for components to be includable as an npm package (import statements need to be preserved for webpack to correctly bundle child components)
+@ webpack aem library bundle
+@ babel plugin to dynamically import components into mediators
+@ mocha tests
