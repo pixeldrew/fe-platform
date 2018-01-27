@@ -3,7 +3,7 @@ import renderReact from '../utils/renderReact';
 
 import 'css/pages/homePage/index.css';
 
-import {Child} from 'carnival';
+import {Child, Fetching} from 'carnival';
 
 const mediator = {
     init() {
@@ -23,10 +23,16 @@ const mediator = {
             const Page = require('components/Page').default;
 
             const headComponents = [];
-            const bodyComponents = [{
-                Component: Child,
-                properties: {attributes: {message: 'this is the home page'}, component: 'Child'}
-            }];
+            const bodyComponents = [
+                {
+                    Component: Child,
+                    properties: {attributes: {message: 'this is the home page'}, component: 'Child'}
+                },
+                {
+                    Component: Fetching,
+                    properties: {}
+                }
+            ];
 
             render(
                 <AppContainer>

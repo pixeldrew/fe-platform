@@ -4,6 +4,12 @@ require('module-alias/register');
 require('ignore-styles').default(['.css']);
 
 const PORT = process.env.PORT || 3033;
+const BRAND = process.env.BRAND || 'whitelabel';
+
+const packageName = require('./package.json').name.split('/')[1];
+
+// path where content lives in AEM
+const publicPath = `/etc/designs/${packageName}/`;
 
 const express = require('express');
 const babel = require('babel-core');
@@ -44,7 +50,7 @@ app.use('/components/:componentId', (req, res) => {
 
 });
 
-app.use('/etc/designs/carnival/', express.static(path.resolve(__dirname, 'dist')));
+app.use(publicPath, express.static(path.resolve(__dirname, 'dist')));
 
 const normalizeAssets = assets => {
     return Array.isArray(assets) ? assets : [assets];
@@ -81,11 +87,9 @@ const server = require('http').createServer(app);
 server.listen(PORT);
 
 // Setup babel transform on components for use with SSR
-chokidar.watch('components/**/*.js').on('all', (event, filePath) => {
+chokidar.watch('components/**/*.js', {ignored: 'components/**/test/*'}).on('all', (event, filePath) => {
 
-    const code = babel.transformFileSync(filePath, {
-        presets: [['env', {targets: {node: '6.10'}}]]
-    }).code;
+    const code = babel.transformFileSync(filePath).code;
     const outputPath = path.resolve(__dirname, 'dist', filePath);
 
     mkdirp.sync(path.dirname(outputPath));

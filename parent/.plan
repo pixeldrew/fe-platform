@@ -1,5 +1,6 @@
 # common bundling works for css
-@ webpack bundle for components to be includable as an npm package (import statements need to be preserved for webpack to correctly bundle child components)
+# npm package of components (import statements should to be preserved for webpack to correctly bundle in consuming package) this breaks node server side rendering because of the import statement
+# css should be included
+# get mocha tests working
 @ webpack aem library bundle
 @ babel plugin to dynamically import components into mediators
-@ mocha tests

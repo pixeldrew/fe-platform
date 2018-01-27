@@ -4,20 +4,25 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
+const packageName = require('./package.json').name.split('/')[1];
 
-const MAX_MODULES = 2;
+// path where content lives in AEM
+const publicPath = `/etc/designs/${packageName}/`;
+const shareModuleAfter = 2;
 
-const ENV = process.env;
+// process images in assets to this quality
+const imageQuality = 85;
 
-const NODE_ENV = ENV.NODE_ENV || 'development';
+// process ENV
+const env = process.env;
+const NODE_ENV = env.NODE_ENV || 'development';
+const BRAND = env.BRAND || 'whitelabel';
 
 const isDevelop = NODE_ENV === 'development';
 
-const BRAND = ENV.BRAND || 'whitelabel';
+const themeLocation = path.resolve(__dirname, 'themes', BRAND);
 
-const THEME_LOCATION = path.resolve(__dirname, 'themes', BRAND);
-
-const postcssPlugins = require('./postcss/processors').processors(THEME_LOCATION);
+const postcssPlugins = require('./postcss/processors').processors(themeLocation);
 
 const extractBundles = bundles => (
     isDevelop ? [] : bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
@@ -25,12 +30,14 @@ const extractBundles = bundles => (
 
 const isVendor = ({resource}) => /node_modules/.test(resource);
 
+const globalIncludes = ['normalize.css'];
+
 let entry = {
     'js/mediators/home': [path.resolve(__dirname, 'js', 'mediators', 'home')],
     'js/mediators/aboutUsPage': [path.resolve(__dirname, 'js', 'mediators', 'aboutUsPage')]
 };
 
-entry = Object.entries(entry).map(([key, value]) => [key, ['babel-polyfill', ...value]]).reduce((a, v) => {
+entry = Object.entries(entry).map(([key, value]) => [key, [...globalIncludes, ...value]]).reduce((a, v) => {
     a[v[0]] = v[1];
     return a;
 }, {});
@@ -61,7 +68,7 @@ module.exports = {
             components: path.resolve(__dirname, 'components'),
             css: path.resolve(__dirname, 'css'),
             assets: path.resolve(__dirname, 'assets'),
-            theme: path.resolve(__dirname, 'themes', BRAND)
+            'platform-theme': path.resolve(__dirname, 'themes', BRAND)
         }
     },
 
@@ -75,7 +82,7 @@ module.exports = {
                     options: {
                         limit: 8192,
                         name: file => file.split('assets/')[1],
-                        publicPath: '/etc/designs/carnival/'
+                        publicPath
                     }
                 }
             },
@@ -88,7 +95,7 @@ module.exports = {
                         options: {
                             mozjpeg: {
                                 progressive: true,
-                                quality: 85
+                                quality: imageQuality
                             }
                         }
                     },
@@ -97,7 +104,7 @@ module.exports = {
                         options: {
                             limit: 8192,
                             name: file => file.split('assets/')[1],
-                            publicPath: '/etc/designs/carnival/'
+                            publicPath
                         }
                     }
                 ].filter(p => p)
@@ -124,7 +131,8 @@ module.exports = {
                 test: /\.css$/,
                 include: [
                     path.resolve(__dirname, 'css'),
-                    path.resolve(THEME_LOCATION, 'css')
+                    path.resolve(themeLocation, 'css'),
+                    path.resolve(__dirname, 'node_modules', 'normalize.css')
                 ],
                 use: isDevelop ? [
                     {loader: 'style-loader', options: {sourceMap: true}},
@@ -151,20 +159,21 @@ module.exports = {
 
         isDevelop ? new webpack.NoEmitOnErrorsPlugin() : null,
 
+        isDevelop ? new webpack.NamedModulesPlugin() : null,
+
         isDevelop ? null : new webpack.optimize.AggressiveMergingPlugin({
-            minSizeReduce: 2,
+            minSizeReduce: shareModuleAfter,
             moveToParents: true
         }),
 
         ...extractBundles([
-            {name: 'js/common', minChunks: (module, count) => count >= MAX_MODULES},
-            {name: 'js/vendor', minChunks: isVendor}
+            {name: 'js/common', minChunks: (module, count) => count >= shareModuleAfter},
+            {name: 'js/vendor', minChunks: module => isVendor(module) && !/\.css/.test(module.resource)}
         ]),
 
         isDevelop ? null : new ExtractTextPlugin({
             allChunks: true,
             filename(getPath) {
-
                 return getPath('css/[name].css').replace('css/js/', 'css/').replace('mediators', 'pages');
             }
         }),
