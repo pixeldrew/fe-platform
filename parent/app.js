@@ -1,10 +1,9 @@
 /*eslint-env node */
 
-require('module-alias/register');
-require('ignore-styles').default(['.css']);
-
 const PORT = process.env.PORT || 3033;
 const BRAND = process.env.BRAND || 'whitelabel';
+
+const moduleAlias = require('module-alias');
 
 const packageName = require('./package.json').name.split('/')[1];
 
@@ -28,6 +27,9 @@ const clearRequire = require('clear-require');
 
 const app = express();
 const wpCompiler = webpack(wpConfig);
+
+moduleAlias.addAlias('platform-theme', path.resolve(__dirname, 'themes', BRAND));
+require('ignore-styles').default(['.css']);
 
 app.use(wpMiddleware(wpCompiler, {
     serverSideRender: true,

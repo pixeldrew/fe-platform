@@ -1,0 +1,20 @@
+{
+  "reporter": [
+    "text",
+    "text-summary",
+    "html",
+    "lcov"
+  ],
+  "report-dir": "reports/istanbul",
+  "require": [
+    "babel-core/register"
+  ],
+  "sourceMap": false,
+  "instrument": false,
+  "exclude": [
+        "library/js/vendor/**/*.js",
+        "components/**/test/*.js",
+        "reports"
+  ],
+  "cache": true
+}

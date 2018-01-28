@@ -2,67 +2,24 @@
   "name": "@carnival-abg/platform",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "license": "ISC",
+  "author": "",
+  "main": "dist/components/index.js",
   "scripts": {
+    "build": "bnr build",
+    "bundle": "webpack -p",
     "clean": "rimraf dist/",
-    "start": "nodemon -w app.js -w webpack.config.js app.js",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
     "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
-    "build": "bnr build",
-    "prepublishOnly": "bnr build",
+    "coverage": "bnr coverage",
     "profile": "bnr profile",
-    "test": "bnr test",
-    "bundle": "webpack -p"
+    "prepare": "bnr build",
+    "start": "nodemon -w app.js -w webpack.config.js app.js",
+    "test": "bnr test"
   },
-  "betterScripts": {
-    "build": {
-      "command": "run-s clean compile-components compile-js bundle",
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "profile": {
-      "command": "webpack -p --profile --json > stats.json",
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "test": {
-      "command": "mocha --ui tdd --require mocha/setup.js --require babel-core/register components/**/test/index.js",
-      "env": {
-        "NODE_ENV": "test"
-      }
-    }
-  },
-  "author": "",
-  "license": "ISC",
-  "config": {
-    "dist": "dist"
-  },
-  "_moduleAliases": {
-    "css": "./css",
-    "platform-theme": "./themes/whitelabel"
-  },
+  "files": ["dist", "themes", "postcss"],
+  "private": true,
   "babel": {
-    "presets": [
-      "react",
-      [
-        "env",
-        {
-          "modules": false,
-          "useBuiltIns": true
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-runtime",
-      [
-        "transform-object-rest-spread",
-        {
-          "useBuiltIns": true
-        }
-      ]
-    ],
     "env": {
       "production": {
         "plugins": [
@@ -83,7 +40,30 @@
           ]
         ]
       }
-    }
+    },
+    "plugins": [
+      "transform-runtime",
+      [
+        "transform-object-rest-spread",
+        {
+          "useBuiltIns": true
+        }
+      ]
+    ],
+    "presets": [
+      "react",
+      [
+        "env",
+        {
+          "modules": false,
+          "useBuiltIns": true
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "normalize.css": "^7.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -101,6 +81,7 @@
     "better-npm-run": "^0.1.0",
     "chai": "^4.1.2",
     "chokidar": "^2.0.0",
+    "clear-require": "^2.0.0",
     "css-loader": "^0.28.9",
     "cssnano": "^3.10.0",
     "enzyme": "^3.3.0",
@@ -110,6 +91,7 @@
     "eslint-loader": "^1.9.0",
     "eslint-plugin-filenames": "^1.2.0",
     "eslint-plugin-react": "^7.6.0",
+    "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "fs-extra": "^5.0.0",
@@ -118,7 +100,9 @@
     "jsdom": "11.6.1",
     "jsdom-global": "3.0.2",
     "lost": "^8.2.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^5.0.0",
+    "module-alias": "^2.0.3",
     "nodemon": "^1.14.11",
     "npm-run-all": "^4.1.2",
     "nyc": "^11.4.1",
@@ -150,16 +134,37 @@
     "webpack-hot-middleware": "^2.21.0",
     "webpack-node-externals": "^1.6.0"
   },
-  "dependencies": {
-    "babel-runtime": "^6.26.0",
-    "clear-require": "^2.0.0",
-    "express": "^4.16.2",
-    "mkdirp": "^0.5.1",
-    "module-alias": "^2.0.3",
-    "normalize.css": "^7.0.0"
-  },
   "peerDependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
+  },
+  "_moduleAliases": {
+    "platform-theme": "./themes/whitelabel"
+  },
+  "betterScripts": {
+    "build": {
+      "command": "run-s clean compile-components compile-js bundle",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "coverage": {
+      "command": "nyc --all --cache -- mocha --ui tdd --require ./mocha/setup.js ./components/**/test/index.js",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "profile": {
+      "command": "webpack -p --profile --json > reports/webpack-stats.json",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "test": {
+      "command": "mocha --require babel-core/register --ui tdd --require ./mocha/setup.js ./components/**/test/index.js",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
   }
 }
