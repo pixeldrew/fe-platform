@@ -33,8 +33,8 @@ const isVendor = ({resource}) => /node_modules/.test(resource);
 const globalIncludes = ['normalize.css'];
 
 let entry = {
-    'js/mediators/home': [path.resolve(__dirname, 'js', 'mediators', 'home')],
-    'js/mediators/aboutUsPage': [path.resolve(__dirname, 'js', 'mediators', 'aboutUsPage')]
+    'js/mediators/home': [path.resolve(__dirname, 'library', 'js', 'mediators', 'home')],
+    'js/mediators/aboutUsPage': [path.resolve(__dirname, 'library', 'js', 'mediators', 'aboutUsPage')]
 };
 
 entry = Object.entries(entry).map(([key, value]) => [key, [...globalIncludes, ...value]]).reduce((a, v) => {
@@ -56,7 +56,7 @@ module.exports = {
     entry,
 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist', 'etc', 'designs', BRAND),
         publicPath: '/',
         filename: '[name].js',
         chunkFilename: 'js/[name].js'
@@ -64,10 +64,8 @@ module.exports = {
 
     resolve: {
         alias: {
-            carnival$: path.resolve(__dirname, 'components', 'index.js'),
-            components: path.resolve(__dirname, 'components'),
-            css: path.resolve(__dirname, 'css'),
-            assets: path.resolve(__dirname, 'assets'),
+            '@carnival-abg/platform$': path.resolve(__dirname, 'components', 'index.js'),
+            'components': path.resolve(__dirname, 'components'),
             'platform-theme': path.resolve(__dirname, 'themes', BRAND)
         }
     },
@@ -76,19 +74,25 @@ module.exports = {
         rules: [
             {
                 test: /\.(eot|ttf|woff|woff2|otf|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                include: path.resolve(__dirname, 'assets', 'fonts'),
+                include: [
+                    path.resolve(__dirname, 'themes', BRAND, 'fonts')
+                ],
                 use: {
                     loader: 'url-loader',
                     options: {
                         limit: 8192,
-                        name: file => file.split('assets/')[1],
+                        name: file => {
+                            return file.split(`${BRAND}/`)[1];
+                        },
                         publicPath
                     }
                 }
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
-                include: path.resolve(__dirname, 'assets', 'images'),
+                include: [
+                    path.resolve(__dirname, 'themes', BRAND, 'images')
+                ],
                 use: [
                     isDevelop ? null : {
                         loader: 'image-webpack-loader',
@@ -102,8 +106,10 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 8192,
-                            name: file => file.split('assets/')[1],
+                            limit: 10,
+                            name: file => {
+                                return file.split(`${BRAND}/`)[1];
+                            },
                             publicPath
                         }
                     }
@@ -113,8 +119,10 @@ module.exports = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'components'),
-                    path.resolve(__dirname, 'js', 'mediators'),
-                    path.resolve(__dirname, 'js', 'utils')
+                    path.resolve(__dirname, 'library', 'js'),
+                ],
+                exclude: [
+                    path.resolve(__dirname, 'library', 'js', 'vendor')
                 ],
                 use: [
                     {
@@ -130,8 +138,8 @@ module.exports = {
             {
                 test: /\.css$/,
                 include: [
-                    path.resolve(__dirname, 'css'),
-                    path.resolve(themeLocation, 'css'),
+                    path.resolve(__dirname, 'components'),
+                    path.resolve(themeLocation, 'styles'),
                     path.resolve(__dirname, 'node_modules', 'normalize.css')
                 ],
                 use: isDevelop ? [

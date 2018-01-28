@@ -15,7 +15,7 @@ const path = require('path');
 module.exports = {
     processors: themeLocation => ([
         postcssPrependImports({
-            path: path.resolve(themeLocation, 'css', 'config'),
+            path: path.resolve(themeLocation, 'styles', 'config'),
             files: ['index.css']
         }),
         postcssImport(),

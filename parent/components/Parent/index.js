@@ -1,5 +1,5 @@
 import React from 'react';
-import {Child} from 'carnival';
+import {Child} from '@carnival-abg/platform';
 
 const Parent = () => (
     <div className={`parent`}>

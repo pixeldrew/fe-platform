@@ -1,9 +1,9 @@
 import React from 'react';
 import renderReact from '../utils/renderReact';
 
-import 'css/pages/homePage/index.css';
+import 'platform-theme/styles/pages/homePage/index.css';
 
-import {Child, Fetching} from 'carnival';
+import {Child, Fetching} from '@carnival-abg/platform';
 
 const mediator = {
     init() {
@@ -50,7 +50,7 @@ mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-    module.hot.accept(['components/Page', 'carnival'], () => {
+    module.hot.accept(['components/Page', '@carnival-abg/platform'], () => {
         mediator.init();
     });
 }

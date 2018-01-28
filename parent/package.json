@@ -6,16 +6,17 @@
   "scripts": {
     "clean": "rimraf dist/",
     "start": "nodemon -w app.js -w webpack.config.js app.js",
-    "babel": "babel components --out-dir dist/components --ignore components/**/test/*",
+    "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
+    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
     "build": "bnr build",
     "prepublishOnly": "bnr build",
     "profile": "bnr profile",
     "test": "bnr test",
-    "webpack": "webpack -p"
+    "bundle": "webpack -p"
   },
   "betterScripts": {
     "build": {
-      "command": "run-s clean babel webpack",
+      "command": "run-s clean compile-components compile-js bundle",
       "env": {
         "NODE_ENV": "production"
       }

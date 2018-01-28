@@ -87,7 +87,7 @@ const server = require('http').createServer(app);
 server.listen(PORT);
 
 // Setup babel transform on components for use with SSR
-chokidar.watch('components/**/*.js', {ignored: 'components/**/test/*'}).on('all', (event, filePath) => {
+chokidar.watch(['components/**/*.js', 'js/**/*.js'], {ignored: ['components/**/test/*', 'js/mediators']}).on('all', (event, filePath) => {
 
     const code = babel.transformFileSync(filePath).code;
     const outputPath = path.resolve(__dirname, 'dist', filePath);
