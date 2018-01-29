@@ -17,12 +17,13 @@ const BRAND = env.BRAND || 'whitelabel';
 const publicPath = `/etc/designs/${BRAND}/`;
 const brandSrcDir = path.resolve(__dirname, 'themes', BRAND);
 const shareModuleAfter = 2;
+const maxFileSizeToInline = 8192; // 8.192kb
 
 const isDevelop = NODE_ENV === 'development';
 
 const themeLocation = path.resolve(__dirname, 'themes', BRAND);
 
-const postcssPlugins = require('./postcss/processors').processors(themeLocation);
+const postcssPlugins = require('./postcss.config').processors(themeLocation);
 
 const extractBundles = bundles => (
     isDevelop ? [] : bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
@@ -80,7 +81,7 @@ module.exports = {
                 use: {
                     loader: 'url-loader',
                     options: {
-                        limit: 8192,
+                        limit: maxFileSizeToInline,
                         name: file => (file.split(`${BRAND}/`)[1]),
                         publicPath
                     }
@@ -104,7 +105,7 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 10,
+                            limit: maxFileSizeToInline,
                             name: file => (file.split(`${BRAND}/`)[1]),
                             publicPath
                         }

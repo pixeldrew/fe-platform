@@ -38,20 +38,6 @@ app.use(wpMiddleware(wpCompiler, {
 
 app.use(wpHotMiddleware(wpCompiler));
 
-app.use('/components/:componentId', (req, res) => {
-
-    try {
-        const module = require(`./dist/components/${ req.params.componentId }`).default;
-
-        res.send(ReactDOMServer.renderToStaticMarkup(module()));
-    } catch (e) {
-        res.sendStatus(500);
-
-        console.warn(e);
-    }
-
-});
-
 app.use(publicPath, express.static(path.resolve(__dirname, 'dist')));
 
 const normalizeAssets = assets => {

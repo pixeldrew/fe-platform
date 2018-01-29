@@ -21,9 +21,9 @@ module.exports = {
     entry,
 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist', 'jcr_root', 'apps', packageName),
         libraryTarget: 'umd',
-        filename: `${packageName}.aem.js`,
+        filename: `server.js`,
         library: packageName
     },
 

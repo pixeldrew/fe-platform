@@ -1,6 +1,6 @@
 {
   "name": "@carnival-abg/platform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -25,7 +25,7 @@
   "files": [
     "dist",
     "themes",
-    "postcss"
+    "postcss.config.js"
   ],
   "babel": {
     "env": {
@@ -158,7 +158,7 @@
       }
     },
     "coverage": {
-      "command": "nyc --all --cache -- mocha --ui tdd --require ./mocha/setup.js ./components/**/test/index.js",
+      "command": "nyc --all --cache -- mocha --ui tdd --require ./mocha-setup.js ./components/**/test/index.js",
       "env": {
         "NODE_ENV": "test"
       }
