@@ -12,18 +12,21 @@
     "clean": "rimraf dist/",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
     "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
+    "copy-css": "copy components/**/*.css dist/components",
     "coverage": "bnr coverage",
     "profile": "bnr profile",
     "prepare": "bnr build",
     "start": "nodemon -w app.js -w webpack.config.js app.js",
     "test": "bnr test"
   },
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  },
   "files": [
     "dist",
     "themes",
     "postcss"
   ],
-  "private": true,
   "babel": {
     "env": {
       "production": {
@@ -87,6 +90,7 @@
     "chai": "^4.1.2",
     "chokidar": "^2.0.0",
     "clear-require": "^2.0.0",
+    "copy": "^0.3.1",
     "css-loader": "^0.28.9",
     "cssnano": "^3.10.0",
     "enzyme": "^3.3.0",
@@ -148,7 +152,7 @@
   },
   "betterScripts": {
     "build": {
-      "command": "run-s clean compile-components compile-js bundle bundle-ssr",
+      "command": "run-s clean compile-components copy-css compile-js bundle bundle-ssr",
       "env": {
         "NODE_ENV": "production"
       }

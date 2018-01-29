@@ -4,11 +4,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
-const packageName = require('./package.json').name.split('/')[1];
-
-// path where content lives in AEM
-const publicPath = `/etc/designs/${packageName}/`;
-const shareModuleAfter = 2;
 
 // process images in assets to this quality
 const imageQuality = 85;
@@ -17,6 +12,11 @@ const imageQuality = 85;
 const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
 const BRAND = env.BRAND || 'whitelabel';
+
+// path where content lives in AEM
+const publicPath = `/etc/designs/${BRAND}/`;
+const brandSrcDir = path.resolve(__dirname, 'themes', BRAND);
+const shareModuleAfter = 2;
 
 const isDevelop = NODE_ENV === 'development';
 
@@ -56,7 +56,7 @@ module.exports = {
     entry,
 
     output: {
-        path: path.resolve(__dirname, 'dist', 'etc', 'designs', BRAND),
+        path: path.resolve(__dirname, 'dist', 'jcr_root', 'etc', 'designs', BRAND),
         publicPath: '/',
         filename: '[name].js',
         chunkFilename: 'js/[name].js'
@@ -75,15 +75,13 @@ module.exports = {
             {
                 test: /\.(eot|ttf|woff|woff2|otf|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 include: [
-                    path.resolve(__dirname, 'themes', BRAND, 'fonts')
+                    path.resolve(brandSrcDir, 'fonts')
                 ],
                 use: {
                     loader: 'url-loader',
                     options: {
                         limit: 8192,
-                        name: file => {
-                            return file.split(`${BRAND}/`)[1];
-                        },
+                        name: file => (file.split(`${BRAND}/`)[1]),
                         publicPath
                     }
                 }
@@ -91,7 +89,7 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
                 include: [
-                    path.resolve(__dirname, 'themes', BRAND, 'images')
+                    path.resolve(brandSrcDir, 'images')
                 ],
                 use: [
                     isDevelop ? null : {
@@ -107,9 +105,7 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 10,
-                            name: file => {
-                                return file.split(`${BRAND}/`)[1];
-                            },
+                            name: file => (file.split(`${BRAND}/`)[1]),
                             publicPath
                         }
                     }

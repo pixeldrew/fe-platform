@@ -102,13 +102,15 @@ chokidar.watch(['components/**/*.js', 'js/**/*.js'], {ignored: ['components/**/t
     });
 });
 
-// copy json to output
-chokidar.watch('components/**/*.json').on('all', (event, filePath) => {
+// copy json and css to output
+chokidar.watch(['components/**/*.json', 'components/**/*.css' ]).on('all', (event, filePath) => {
     const outputPath = path.resolve(__dirname, 'dist', filePath);
 
     mkdirp.sync(path.dirname(outputPath));
 
     fs.copySync(filePath, outputPath);
 
-    clearRequire(outputPath.replace(/\.json$/, ''));
+    if(!/\.css$/.test(filePath)) {
+        clearRequire(outputPath.replace(/\.json$/, ''));
+    }
 });
