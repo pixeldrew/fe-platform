@@ -4,10 +4,11 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "main": "dist/components/index.js",
+  "module": "dist/components/index.js",
   "scripts": {
     "build": "bnr build",
     "bundle": "webpack -p",
+    "bundle-ssr": "webpack -p --config webpack.aem.config.js",
     "clean": "rimraf dist/",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
     "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
@@ -17,7 +18,11 @@
     "start": "nodemon -w app.js -w webpack.config.js app.js",
     "test": "bnr test"
   },
-  "files": ["dist", "themes", "postcss"],
+  "files": [
+    "dist",
+    "themes",
+    "postcss"
+  ],
   "private": true,
   "babel": {
     "env": {
@@ -143,7 +148,7 @@
   },
   "betterScripts": {
     "build": {
-      "command": "run-s clean compile-components compile-js bundle",
+      "command": "run-s clean compile-components compile-js bundle bundle-ssr",
       "env": {
         "NODE_ENV": "production"
       }

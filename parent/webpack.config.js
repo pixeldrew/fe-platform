@@ -65,7 +65,7 @@ module.exports = {
     resolve: {
         alias: {
             '@carnival-abg/platform$': path.resolve(__dirname, 'components', 'index.js'),
-            'components': path.resolve(__dirname, 'components'),
+            components: path.resolve(__dirname, 'components'),
             'platform-theme': path.resolve(__dirname, 'themes', BRAND)
         }
     },
@@ -157,6 +157,9 @@ module.exports = {
         ]
     },
     plugins: [
+
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|fr|it|en|es|nl/),
+
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify(NODE_ENV)
