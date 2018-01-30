@@ -16,14 +16,19 @@ const mediator = {
 
     initReact() {
 
+        // TODO: Create a babel plugin
+        // Reads const TEMPLATE_COMPONENTS={head:['@carnival-abg/platform/Navigation'], body[]}
+        // in this mediator.initReact and adds the correct import statements at the beginning of this file
+        // then if NODE_ENV === development construct the following template else add the renderReact portions
+
         if (process.env.NODE_ENV === 'development') {
 
             const render = require('react-dom').render;
             const AppContainer = require('react-hot-loader').AppContainer;
             const Page = require('components/Page').default;
 
-            const headComponents = [];
-            const bodyComponents = [
+            const head = [];
+            const body = [
                 {
                     Component: Child,
                     properties: {attributes: {message: 'this is the home page'}, component: 'Child'}
@@ -36,7 +41,7 @@ const mediator = {
 
             render(
                 <AppContainer>
-                    <Page headComponents={headComponents} bodyComponents={bodyComponents}/>
+                    <Page headComponents={head} bodyComponents={body}/>
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
@@ -48,7 +53,7 @@ const mediator = {
 
 mediator.init();
 
-// Webpack Hot Module Replacement API
+// TODO: add this snippit by babel plugin
 if (module.hot) {
     module.hot.accept(['components/Page', '@carnival-abg/platform'], () => {
         mediator.init();

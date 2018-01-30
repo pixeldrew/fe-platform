@@ -33,6 +33,7 @@ const isVendor = ({resource}) => /node_modules/.test(resource);
 
 const globalIncludes = ['normalize.css'];
 
+// TODO: make this dynamic (list the mediators directory)
 let entry = {
     'js/mediators/home': [path.resolve(__dirname, 'library', 'js', 'mediators', 'home')],
     'js/mediators/aboutUsPage': [path.resolve(__dirname, 'library', 'js', 'mediators', 'aboutUsPage')]

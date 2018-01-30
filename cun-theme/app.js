@@ -54,9 +54,6 @@ app.use('/template/:templateName', (req, res) => {
         .map(([k, p]) => (p.map(p1 => `<script data-webkit-id="${k}" src="/${p1}"></script>`).join('\n')))
         .join('');
 
-    // TODO: Use the Babel AST to read the contents of the mediator searching for mediator.initReact TEMPLATE_COMPONENTS
-    // add the data to the SR object
-    // TODO: Strip this out and put it in an ejs file
     res.send(`
 <!DOCTYPE html>
 <html>
