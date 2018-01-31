@@ -15,7 +15,7 @@ const NODE_ENV = env.NODE_ENV || 'development';
 const SOURCE_MAPS = env.SOURCE_MAPS;
 const BRAND = env.BRAND || 'whitelabel';
 
-const alias = require('./webpackAliases')(BRAND);
+const alias = require('./webpack.aliases')(BRAND);
 
 // path where content lives in AEM
 const publicPath = `/etc/designs/${BRAND}/`;
@@ -42,12 +42,12 @@ const globalIncludes = ['normalize.css'];
 let entry = {};
 
 // read all mediator (templates)
-fs.readdirSync( mediatorDir ).forEach( file => {
+fs.readdirSync(mediatorDir).forEach(file => {
 
     const fullPath = path.resolve(mediatorDir, file);
 
     if (/\.js/.test(file) && !fs.statSync(fullPath).isDirectory()) {
-        entry[ `js/mediators/${ file.replace(/\.js/, '') }` ] = [ `${fullPath}` ];
+        entry[`js/mediators/${ file.replace(/\.js/, '') }`] = [`${fullPath}`];
     }
 
 });
@@ -127,7 +127,7 @@ module.exports = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'components'),
-                    path.resolve(__dirname, 'library', 'js'),
+                    path.resolve(__dirname, 'library', 'js')
                 ],
                 exclude: [
                     path.resolve(__dirname, 'library', 'js', 'vendor')
@@ -212,4 +212,3 @@ module.exports = {
         entrypoints: true
     }
 };
-

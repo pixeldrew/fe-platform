@@ -9,18 +9,16 @@ const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
 const BRAND = env.BRAND || 'whitelabel';
 
-const alias = require('./webpackAliases')(BRAND, 'dist');
+const alias = require('./webpack.aliases')(BRAND, 'dist');
 const packageName = require('./package.json').name.split('/')[1];
-
-let entry = {
-    main: path.resolve(__dirname, 'dist', 'library', 'js', 'ssr')
-};
 
 const aem = {
 
     devtool: 'none',
 
-    entry,
+    entry: {
+        main: path.resolve(__dirname, 'dist', 'library', 'js', 'ssr')
+    },
 
     output: {
         path: path.resolve(__dirname, 'dist', 'jcr_root', 'apps', packageName),
@@ -35,6 +33,7 @@ const aem = {
 
     plugins: [
 
+        // disables css styles required in modules from being converted
         new webpack.NormalModuleReplacementPlugin(
             /\.css$/,
             path.resolve(__dirname, 'dist', 'library', 'js', 'ssr', 'null-style.js')
@@ -51,20 +50,24 @@ const aem = {
     ]
 };
 
-const node = Object.assign({}, aem);
+const node = Object.assign({},
+    aem,
+    {
+        target: 'node',
 
-node.externals = [nodeExternals()];
-node.target = 'node';
+        externals: [nodeExternals()],
 
-node.entry = {
-    main: path.resolve(__dirname, 'dist', 'components')
-};
+        entry: {
+            main: path.resolve(__dirname, 'dist', 'components')
+        },
 
-node.output = {
-    path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    filename: `${packageName}.umd.js`,
-    library: packageName
-};
+        output: {
+            path: path.resolve(__dirname, 'dist'),
+            libraryTarget: 'umd',
+            filename: `${packageName}.umd.js`,
+            library: packageName
+        }
+    }
+);
 
 module.exports = [aem, node];

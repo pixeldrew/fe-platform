@@ -11,10 +11,11 @@
   ],
   "sourceMap": false,
   "instrument": false,
+  "include": [
+    "components"
+  ],
   "exclude": [
-        "library/js/vendor/**/*.js",
-        "components/**/test/*.js",
-        "reports"
+    "components/**/test"
   ],
   "cache": true
 }

@@ -1,3 +1,1 @@
-// this file is used to disable css requires in webpack build for aem
-
-module.exports = '';
+// this file is used to disable css requires in webpack build for aem do not delete, do not include anything else here

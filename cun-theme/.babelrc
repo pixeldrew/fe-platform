@@ -1,0 +1,43 @@
+{
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-react-inline-elements",
+        "transform-react-constant-elements",
+        "transform-react-remove-prop-types"
+      ]
+    },
+    "test": {
+      "presets": [
+        "react",
+        [
+          "env",
+          {
+            "modules": "commonjs",
+            "useBuiltIns": true
+          }
+        ]
+      ],
+      "plugins": ["istanbul"]
+    }
+  },
+  "plugins": [
+    "transform-runtime",
+    [
+      "transform-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ]
+  ],
+  "presets": [
+    "react",
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": true
+      }
+    ]
+  ]
+}

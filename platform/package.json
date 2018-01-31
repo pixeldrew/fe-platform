@@ -1,6 +1,6 @@
 {
   "name": "@carnival-abg/platform",
-  "version": "1.0.6",
+  "version": "1.0.0-alpha.1",
   "description": "Carnival Platform Components",
   "license": "ISC",
   "author": "",
@@ -8,14 +8,14 @@
   "main": "dist/platform.umd.js",
   "scripts": {
     "build": "bnr build",
-    "bundle": "webpack -p",
+    "bundle-mediators": "webpack -p",
     "bundle-ssr": "webpack --config webpack.ssr.config.js",
     "clean": "rimraf dist/",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
     "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/vendor/",
     "copy-assets": "copyfiles components/**/*.css components/**/*.json dist/",
     "coverage": "bnr coverage",
-    "profile": "bnr profile",
+    "profile-build": "bnr profile",
     "prepare": "bnr build",
     "start": "nodemon -w app.js -w webpack.config.js app.js",
     "test": "bnr test"
@@ -28,49 +28,6 @@
     "themes",
     "postcss.config.js"
   ],
-  "babel": {
-    "env": {
-      "production": {
-        "plugins": [
-          "transform-react-inline-elements",
-          "transform-react-constant-elements",
-          "transform-react-remove-prop-types"
-        ]
-      },
-      "test": {
-        "presets": [
-          "react",
-          [
-            "env",
-            {
-              "modules": "commonjs",
-              "useBuiltIns": true
-            }
-          ]
-        ],
-        "plugins": ["istanbul"]
-      }
-    },
-    "plugins": [
-      "transform-runtime",
-      [
-        "transform-object-rest-spread",
-        {
-          "useBuiltIns": true
-        }
-      ]
-    ],
-    "presets": [
-      "react",
-      [
-        "env",
-        {
-          "modules": false,
-          "useBuiltIns": true
-        }
-      ]
-    ]
-  },
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "normalize.css": "^7.0.0"
@@ -155,7 +112,7 @@
   },
   "betterScripts": {
     "build": {
-      "command": "run-s clean compile-components copy-assets compile-js bundle bundle-ssr",
+      "command": "run-s clean compile-components copy-assets compile-js bundle-mediators bundle-ssr",
       "env": {
         "NODE_ENV": "production"
       }
@@ -166,7 +123,7 @@
         "NODE_ENV": "test"
       }
     },
-    "profile": {
+    "profile-build": {
       "command": "webpack -p --profile --json > reports/webpack-stats.json",
       "env": {
         "NODE_ENV": "production"

@@ -15,7 +15,7 @@ const NODE_ENV = env.NODE_ENV || 'development';
 const SOURCE_MAPS = env.SOURCE_MAPS;
 const BRAND = env.BRAND || 'cun';
 
-const alias = require('./webpackAliases')(BRAND);
+const alias = require('./webpack.aliases')(BRAND);
 
 // path where content lives in AEM
 const publicPath = `/etc/designs/${BRAND}/`;
