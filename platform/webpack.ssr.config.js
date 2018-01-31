@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 // process ENV
 const env = process.env;
@@ -15,7 +16,7 @@ let entry = {
     main: path.resolve(__dirname, 'dist', 'library', 'js', 'ssr')
 };
 
-module.exports = {
+const aem = {
 
     devtool: 'none',
 
@@ -47,12 +48,23 @@ module.exports = {
             }
         })
 
-    ],
-
-    stats: {
-        usedExports: true,
-        optimizationBailout: true,
-        entrypoints: true
-    }
+    ]
 };
 
+const node = Object.assign({}, aem);
+
+node.externals = [nodeExternals()];
+node.target = 'node';
+
+node.entry = {
+    main: path.resolve(__dirname, 'dist', 'components')
+};
+
+node.output = {
+    path: path.resolve(__dirname, 'dist'),
+    libraryTarget: 'umd',
+    filename: `${packageName}.umd.js`,
+    library: packageName
+};
+
+module.exports = [aem, node];

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "cunard test theme that reuses components from platform",
   "main": "index.js",
+  "file": "dist/cun.umd.js",
   "scripts": {
     "build": "bnr build",
     "bundle": "webpack -p",
-    "bundle-ssr": "webpack -p --config webpack.aem.config.js",
+    "bundle-ssr": "webpack --config webpack.ssr.config.js",
     "clean": "rimraf dist/",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
-    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
+    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/vendor",
     "copy-assets": "copyfiles components/**/*.css components/**/*.json dist/",
     "coverage": "bnr coverage",
     "profile": "bnr profile",
@@ -41,7 +42,8 @@
               "useBuiltIns": true
             }
           ]
-        ]
+        ],
+        "plugins": ["istanbul"]
       }
     },
     "plugins": [
@@ -65,13 +67,14 @@
     ]
   },
   "dependencies": {
-    "@carnival-abg/platform": "^1.0.0"
+    "@carnival-abg/platform": "^1.0.6"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-inline-elements": "^6.22.0",

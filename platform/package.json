@@ -1,17 +1,18 @@
 {
   "name": "@carnival-abg/platform",
-  "version": "1.0.3",
-  "description": "",
+  "version": "1.0.6",
+  "description": "Carnival Platform Components",
   "license": "ISC",
   "author": "",
   "module": "dist/components/index.js",
+  "main": "dist/platform.umd.js",
   "scripts": {
     "build": "bnr build",
     "bundle": "webpack -p",
-    "bundle-ssr": "webpack -p --config webpack.aem.config.js",
+    "bundle-ssr": "webpack --config webpack.ssr.config.js",
     "clean": "rimraf dist/",
     "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
-    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
+    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/vendor/",
     "copy-assets": "copyfiles components/**/*.css components/**/*.json dist/",
     "coverage": "bnr coverage",
     "profile": "bnr profile",
@@ -46,7 +47,8 @@
               "useBuiltIns": true
             }
           ]
-        ]
+        ],
+        "plugins": ["istanbul"]
       }
     },
     "plugins": [
@@ -78,6 +80,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-react-inline-elements": "^6.22.0",

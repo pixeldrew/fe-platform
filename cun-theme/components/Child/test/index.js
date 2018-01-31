@@ -18,7 +18,7 @@ suite('<Child />', () => {
 
     test( 'Component rendered dynamic results', () => {
 
-        assert.equal( wrapper.find( 'div' ).length, 1 );
+        assert.equal( wrapper.find( 'div' ).length, 2 );
     });
 
 
