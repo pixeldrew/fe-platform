@@ -1,31 +1,170 @@
 {
-  "name": "cun-theme",
+  "name": "@carnival-abg/cun",
   "version": "1.0.0",
-  "description": "",
+  "description": "cunard test theme that reuses components from platform",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "bnr build",
+    "bundle": "webpack -p",
+    "bundle-ssr": "webpack -p --config webpack.aem.config.js",
+    "clean": "rimraf dist/",
+    "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
+    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/mediators --ignore library/js/vendor",
+    "copy-assets": "copyfiles components/**/*.css components/**/*.json dist/",
+    "coverage": "bnr coverage",
+    "profile": "bnr profile",
+    "prepare": "bnr build",
+    "start": "nodemon -w app.js -w webpack.config.js app.js",
+    "test": "bnr test"
   },
   "author": "",
   "license": "ISC",
+  "_moduleAliases": {
+    "platform-theme": "./themes/cun"
+  },
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": [
+          "transform-react-inline-elements",
+          "transform-react-constant-elements",
+          "transform-react-remove-prop-types"
+        ]
+      },
+      "test": {
+        "presets": [
+          "react",
+          [
+            "env",
+            {
+              "modules": "commonjs",
+              "useBuiltIns": true
+            }
+          ]
+        ]
+      }
+    },
+    "plugins": [
+      "transform-runtime",
+      [
+        "transform-object-rest-spread",
+        {
+          "useBuiltIns": true
+        }
+      ]
+    ],
+    "presets": [
+      "react",
+      [
+        "env",
+        {
+          "modules": false,
+          "useBuiltIns": true
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "@carnival-abg/platform": "^1.0.0"
+  },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-constant-elements": "^6.23.0",
+    "babel-plugin-transform-react-inline-elements": "^6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "better-npm-run": "^0.1.0",
+    "chai": "^4.1.2",
+    "chokidar": "^2.0.0",
+    "clear-require": "^2.0.0",
+    "copyfiles": "^1.2.0",
+    "css-loader": "^0.28.9",
+    "cssnano": "^3.10.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.16.0",
+    "eslint-config-walmart": "^2.2.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-filenames": "^1.2.0",
+    "eslint-plugin-react": "^7.6.1",
     "express": "^4.16.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "fs-extra": "^5.0.0",
+    "ignore-styles": "^5.0.1",
+    "image-webpack-loader": "^4.0.0",
+    "jsdom": "^11.6.2",
+    "jsdom-global": "3.0.2",
     "lost": "^8.2.0",
-    "postcss": "^6.0.14",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.0.0",
+    "module-alias": "^2.0.3",
+    "nodemon": "^1.14.11",
+    "npm-run-all": "^4.1.2",
+    "nyc": "^11.4.1",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "postcss": "^6.0.16",
     "postcss-css-variables": "^0.8.0",
-    "postcss-cssnext": "^3.0.2",
+    "postcss-cssnext": "^3.1.0",
     "postcss-flexibility": "^2.0.0",
     "postcss-fontpath": "^1.0.0",
     "postcss-for": "^2.1.1",
     "postcss-import": "^11.0.0",
+    "postcss-loader": "^2.0.10",
     "postcss-middleware": "^1.1.4",
     "postcss-mixins": "^6.2.0",
+    "postcss-prepend-imports": "^1.0.1",
     "postcss-pxtorem": "^4.0.1",
     "postcss-reporter": "^5.0.0",
     "postcss-url": "^7.3.0",
-    "postcss-utilities": "^0.7.0"
+    "postcss-utilities": "^0.8.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-hot-loader": "^3.1.3",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.20.1",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4",
+    "webpack-hot-middleware": "^2.21.0",
+    "webpack-node-externals": "^1.6.0"
   },
-  "dependencies": {
-    "cssnext-parent": "file:../parent"
+  "peerDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "betterScripts": {
+    "build": {
+      "command": "run-s clean compile-components copy-assets compile-js bundle bundle-ssr",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "coverage": {
+      "command": "nyc --all --cache -- mocha --ui tdd --require ./mocha-setup.js ./components/**/test/index.js",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "profile": {
+      "command": "webpack -p --profile --json > reports/webpack-stats.json",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "test": {
+      "command": "mocha --require babel-core/register --ui tdd --require ./mocha/setup.js ./components/**/test/index.js",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
   }
 }

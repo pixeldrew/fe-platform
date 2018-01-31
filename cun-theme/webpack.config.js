@@ -13,7 +13,7 @@ const imageQuality = 85;
 const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
 const SOURCE_MAPS = env.SOURCE_MAPS;
-const BRAND = env.BRAND || 'whitelabel';
+const BRAND = env.BRAND || 'cun';
 
 const alias = require('./webpackAliases')(BRAND);
 
@@ -29,7 +29,7 @@ const aemPath = path.resolve(__dirname, 'dist', 'jcr_root', 'etc', 'designs', BR
 const mediatorDir = path.resolve(__dirname, 'library', 'js', 'mediators');
 const themeLocation = path.resolve(__dirname, 'themes', BRAND);
 
-const postcssPlugins = require('./postcss.config').processors(themeLocation);
+const postcssPlugins = require('@carnival-abg/platform/postcss.config').processors(themeLocation);
 
 const extractBundles = bundles => (
     isDevelop ? [] : bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
@@ -148,7 +148,8 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'components'),
                     path.resolve(themeLocation, 'styles'),
-                    path.resolve(__dirname, 'node_modules', 'normalize.css')
+                    path.resolve(__dirname, 'node_modules', 'normalize.css'),
+                    path.resolve(__dirname, 'node_modules', '@carnival-abg', 'platform', 'dist')
                 ],
                 use: isDevelop ? [
                     {loader: 'style-loader', options: {sourceMap: true}},

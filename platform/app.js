@@ -28,6 +28,7 @@ const clearRequire = require('clear-require');
 const app = express();
 const wpCompiler = webpack(wpConfig);
 
+// important alias
 moduleAlias.addAlias('platform-theme', path.resolve(__dirname, 'themes', BRAND));
 require('ignore-styles').default(['.css']);
 
@@ -40,9 +41,7 @@ app.use(wpHotMiddleware(wpCompiler));
 
 app.use(publicPath, express.static(path.resolve(__dirname, 'dist')));
 
-const normalizeAssets = assets => {
-    return Array.isArray(assets) ? assets : [assets];
-};
+const normalizeAssets = assets => (Array.isArray(assets) ? assets : [assets]);
 
 app.use('/template/:templateName', (req, res) => {
 
@@ -78,7 +77,7 @@ const server = require('http').createServer(app);
 server.listen(PORT);
 
 // Setup babel transform on components for use with SSR
-chokidar.watch(['components/**/*.js', 'js/**/*.js'], {ignored: ['components/**/test/*', 'js/mediators']}).on('all', (event, filePath) => {
+chokidar.watch(['components/**/*.js', 'library/js/**/*.js'], {ignored: ['components/**/test', 'library/js/mediators', 'library/js/vendor']}).on('all', (event, filePath) => {
 
     const code = babel.transformFileSync(filePath).code;
     const outputPath = path.resolve(__dirname, 'dist', filePath);
@@ -92,7 +91,7 @@ chokidar.watch(['components/**/*.js', 'js/**/*.js'], {ignored: ['components/**/t
 });
 
 // copy json and css to output
-chokidar.watch(['components/**/*.json', 'components/**/*.css' ]).on('all', (event, filePath) => {
+chokidar.watch(['components/**/*.json', 'components/**/styles' ]).on('all', (event, filePath) => {
     const outputPath = path.resolve(__dirname, 'dist', filePath);
 
     mkdirp.sync(path.dirname(outputPath));

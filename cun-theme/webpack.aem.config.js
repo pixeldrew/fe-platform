@@ -6,7 +6,7 @@ const path = require('path');
 // process ENV
 const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
-const BRAND = env.BRAND || 'whitelabel';
+const BRAND = env.BRAND || 'cun';
 
 const alias = require('./webpackAliases')(BRAND, 'dist');
 const packageName = require('./package.json').name.split('/')[1];
@@ -36,7 +36,7 @@ module.exports = {
 
         new webpack.NormalModuleReplacementPlugin(
             /\.css$/,
-            path.resolve(__dirname, 'dist', 'library', 'js', 'ssr', 'null-style.js')
+            require.resolve('@carnival-abg/platform/dist/library/js/ssr/null-style')
         ),
 
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|fr|it|en|es|nl/),

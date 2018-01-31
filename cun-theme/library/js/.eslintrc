@@ -1,0 +1,6 @@
+globals:
+  SR: true
+
+rules:
+  "filenames/match-exported": 0,
+  "filenames/match-regex": [2, "^([a-z0-9]+)([A-Z][a-z0-9]+)*$", true]

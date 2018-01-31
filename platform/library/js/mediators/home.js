@@ -1,7 +1,7 @@
 import React from 'react';
 import renderReact from '../utils/renderReact';
 
-import 'platform-theme/styles/pages/homePage/index.css';
+import 'platform-theme/styles/pages/home/index.css';
 
 import {Child, Fetching} from '@carnival-abg/platform';
 
@@ -25,7 +25,7 @@ const mediator = {
 
             const render = require('react-dom').render;
             const AppContainer = require('react-hot-loader').AppContainer;
-            const Page = require('components/Page').default;
+            const Page = require('../../../components/Page').default;
 
             const head = [];
             const body = [
@@ -55,7 +55,7 @@ mediator.init();
 
 // TODO: add this snippit by babel plugin
 if (module.hot) {
-    module.hot.accept(['components/Page', '@carnival-abg/platform'], () => {
+    module.hot.accept(['../../../components/Page', '@carnival-abg/platform'], () => {
         mediator.init();
     });
 }
