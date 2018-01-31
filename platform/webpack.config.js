@@ -37,7 +37,7 @@ const extractBundles = bundles => (
 
 const isVendor = ({resource}) => /node_modules/.test(resource);
 
-const globalIncludes = [path.resolve(themeLocation, 'styles', 'global')];
+const globalIncludes = [path.resolve(themeLocation, 'styles', 'global', 'index.css')];
 
 let entry = {};
 

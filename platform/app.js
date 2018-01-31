@@ -61,7 +61,9 @@ app.use('/template/:templateName', (req, res) => {
 <html>
   <head>
     <title></title>
-	<script>var SR = {components:{data:[]}};</script>
+	<script>
+	var SR = {components:{data:[]}};
+	</script>
   </head>
   <body>
   <div id='main'></div>

@@ -1,13 +1,15 @@
 ### platform v2
 
 **Problem,** - Current FE build pipeline has limitations in that components are bundled into templates (in the platform 
-the template is represented as a mediator).
-These templates can not have different views or extend the component because the same component is reused across themes.
+a template is represented as a mediator).
+These templates can not have different views or extend the platform component because the same compiled component is 
+reused across themes.
 
 A POC is required to decouple the platform javascript from a theme's implementation of the platform. 
  
 #### Platform Requires Support For:
 * Ability To Publish As A Standalone NPM Module and be consumed by Theme packages
+* Support Cross Platform Development
 * Template bundling
 * Unit Testing
 * Code Coverage Of Platform Components
@@ -25,7 +27,7 @@ A POC is required to decouple the platform javascript from a theme's implementat
 * Tree Shaking of unused modules
 
 ### Testing this POC
-This POC requires that a local npm repository is setup and carnival-abg user/scope is added to it. A good private npm 
+This POC requires that a local npm repository is setup and a carnival-abg user/scope is added to it. A good private npm 
 repo is veradaccio, it has it's own docker install. (See instructions [here](https://github.com/verdaccio/verdaccio]))
  
 ### Run
