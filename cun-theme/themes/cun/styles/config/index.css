@@ -1,3 +1,12 @@
+/* holds all global variables, do not include CSS here as it will be included in every component */
+
 :root {
-    --font-h1: 'Helvetica';
+    --font-body: 'Helvetica';
+    /* do not use css sets */
+    --style-h1 {
+        font-family: var(--font-h1);
+        font-size: 40px;
+        color: var(--color-primary1);
+        font-weight: normal;
+    };
 }

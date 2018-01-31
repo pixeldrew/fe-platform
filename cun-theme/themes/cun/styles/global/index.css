@@ -1,0 +1,9 @@
+@include "normalize.css";
+
+body {
+    font-family: var(--font-body);
+}
+
+h1 {
+    @apply --style-h1;
+}

@@ -37,7 +37,7 @@ const extractBundles = bundles => (
 
 const isVendor = ({resource}) => /node_modules/.test(resource);
 
-const globalIncludes = ['normalize.css'];
+const globalIncludes = [path.resolve(themeLocation, 'styles', 'global')];
 
 let entry = {};
 
@@ -52,6 +52,7 @@ fs.readdirSync(mediatorDir).forEach(file => {
 
 });
 
+// add global include to mediators
 entry = Object.entries(entry).map(([key, value]) => [key, [...globalIncludes, ...value]]).reduce((a, v) => {
     a[v[0]] = v[1];
     return a;

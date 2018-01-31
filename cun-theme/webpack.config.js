@@ -37,21 +37,22 @@ const extractBundles = bundles => (
 
 const isVendor = ({resource}) => /node_modules/.test(resource);
 
-const globalIncludes = ['normalize.css'];
+const globalIncludes = [path.resolve(themeLocation, 'styles', 'global', 'index.css')];
 
 let entry = {};
 
 // read all mediator (templates)
-fs.readdirSync( mediatorDir ).forEach( file => {
+fs.readdirSync(mediatorDir).forEach(file => {
 
     const fullPath = path.resolve(mediatorDir, file);
 
     if (/\.js/.test(file) && !fs.statSync(fullPath).isDirectory()) {
-        entry[ `js/mediators/${ file.replace(/\.js/, '') }` ] = [ `${fullPath}` ];
+        entry[`js/mediators/${ file.replace(/\.js/, '') }`] = [`${fullPath}`];
     }
 
 });
 
+// add in global Includes
 entry = Object.entries(entry).map(([key, value]) => [key, [...globalIncludes, ...value]]).reduce((a, v) => {
     a[v[0]] = v[1];
     return a;
