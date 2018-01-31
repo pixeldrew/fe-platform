@@ -4,6 +4,7 @@
 # get mocha tests working
 # webpack aem library bundle
 # publish to private npm repo to test
+# got a test cun theme building
 @ loading of data for each components
 @ babel plugin to dynamically import components into mediators
 @ port hal components
