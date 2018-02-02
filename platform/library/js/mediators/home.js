@@ -1,7 +1,10 @@
+/* global SR */
 import React from 'react';
 import renderReact from '../utils/renderReact';
 
 import 'platform-theme/styles/pages/home/index.css';
+
+import {uniqBy} from 'lodash';
 
 import {Child, Fetching} from '@carnival-abg/platform';
 
@@ -17,27 +20,32 @@ const mediator = {
     initReact() {
 
         // TODO: Create a babel plugin
-        // Reads const TEMPLATE_COMPONENTS={head:['@carnival-abg/platform/Navigation'], body[]}
-        // in this mediator.initReact and adds the correct import statements at the beginning of this file
-        // then if NODE_ENV === development construct the following template else add the renderReact portions
+        // Reads const _COMPONENTS={head:['<component id as string>'], body[]}
+        // in this function (initReact) and adds the correct import statements at the beginning of the mediator
+        // and converts:
+        // const _COMPONENTS = { head: [], body: ['Child', 'Fetching'] }
+        // to:
+
+        const _COMPONENTS = {
+            head: [],
+            body: [
+                {id: 'Child', Component: Child},
+                {id: 'Fetching', Component: Fetching}
+            ]
+        };
+
+        // Then adds this snipit to the page
+        const {head, body} = _COMPONENTS;
 
         if (process.env.NODE_ENV === 'development') {
 
             const render = require('react-dom').render;
             const AppContainer = require('react-hot-loader').AppContainer;
-            const Page = require('../../../components/Page').default;
+            const Page = require('@carnival-abg/platform').Page;
 
-            const head = [];
-            const body = [
-                {
-                    Component: Child,
-                    properties: {attributes: {message: 'this is the home page'}, component: 'Child'}
-                },
-                {
-                    Component: Fetching,
-                    properties: {}
-                }
-            ];
+            [...head, ...body].forEach(definition => {
+                definition.properties = SR.components.data.find(model => model.type === definition.id) || {};
+            });
 
             render(
                 <AppContainer>
@@ -45,7 +53,9 @@ const mediator = {
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(Child, 'child');
+
+            uniqBy([...head, ...body], 'id').forEach(({Component, id}) => renderReact(Component, id));
+
         }
     }
 
@@ -53,9 +63,9 @@ const mediator = {
 
 mediator.init();
 
-// TODO: add this snippit by babel plugin
+// Add this snipit by babel plugin '@carnival-abg/platform' should be <PACKAGE_NAME>
 if (module.hot) {
-    module.hot.accept(['../../../components/Page', '@carnival-abg/platform'], () => {
-        mediator.init();
+    module.hot.accept(['@carnival-abg/platform'], () => {
+        mediator.initReact();
     });
 }

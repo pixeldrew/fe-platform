@@ -1,9 +1,9 @@
 {
-  "name": "@carnival-abg/cun",
+  "name": "@carnival-abg/cunplatform",
   "version": "1.0.0-alpha1",
   "description": "cunard test theme that reuses components from platform",
   "main": "index.js",
-  "file": "dist/cun.umd.js",
+  "file": "dist/cunplatform.umd.js",
   "scripts": {
     "build": "bnr build",
     "bundle-mediators": "webpack -p",

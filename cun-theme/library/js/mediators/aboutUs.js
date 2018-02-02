@@ -1,10 +1,10 @@
 import React from 'react';
 import renderReact from '@carnival-abg/platform/dist/library/js/utils/renderReact';
 
-import 'cun-theme/styles/pages/aboutUs/index.css';
+import 'cunplatform-theme/styles/pages/aboutUs/index.css';
 
 import {Parent} from '@carnival-abg/platform';
-import {Child} from '@carnival-abg/cun';
+import {Child} from '@carnival-abg/cunplatform';
 
 const mediator = {
     init() {
@@ -51,7 +51,7 @@ mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-    module.hot.accept(['@carnival-abg/cun'], () => {
+    module.hot.accept(['@carnival-abg/cunplatform'], () => {
         mediator.init();
     });
 }

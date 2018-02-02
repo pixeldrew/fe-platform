@@ -7,7 +7,7 @@
   ],
   "report-dir": "reports/istanbul",
   "require": [
-    "babel-core/register"
+    "babel-register"
   ],
   "sourceMap": false,
   "instrument": false,

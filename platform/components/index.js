@@ -1,5 +1,6 @@
 import Child from './Child';
 import Parent from './Parent';
+import Page from './Page';
 import Fetching from './Fetching';
 import Unused from './Unused';
 
@@ -8,4 +9,4 @@ import Unused from './Unused';
  * A component must be in here to be renderable in AEM
  */
 
-export { Child, Parent, Fetching, Unused };
+export { Child, Fetching, Parent, Page, Unused };

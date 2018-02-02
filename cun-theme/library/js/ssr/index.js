@@ -4,7 +4,7 @@ import '@carnival-abg/platform/dist/library/js/ssr/polyfill';
 import {createFactory} from 'react';
 import {renderToString, renderToStaticMarkup} from 'react-dom/server';
 
-import * as platform from '@carnival-abg/cun';
+import * as platform from '@carnival-abg/cunplatform';
 
 const render = props => {
 

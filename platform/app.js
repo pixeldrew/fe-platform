@@ -47,30 +47,37 @@ app.use('/template/:templateName', (req, res) => {
 
     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
 
+    // TODO: Use the Babel AST to read the contents of the mediator searching for mediator.initReact _COMPONENTS
+    // Then find test data and collect it as an array of test data
+    const componentData = '[]';
+
+    const renderedPage = '';
+
+    const {templateName} = req.params;
+
     const scripts = Object.entries(assetsByChunkName)
         .map(([k, p]) => ([k, normalizeAssets(p)]))
-        .filter(([k, p]) => p.indexOf(`js/mediators/${req.params.templateName}.js`) + 1)
+        .filter(([k, p]) => p.indexOf(`js/mediators/${templateName}.js`) + 1)
         .map(([k, p]) => (p.map(p1 => `<script data-webkit-id="${k}" src="/${p1}"></script>`).join('\n')))
         .join('');
 
-    // TODO: Use the Babel AST to read the contents of the mediator searching for mediator.initReact TEMPLATE_COMPONENTS
-    // add the data to the SR object
     // TODO: Strip this out and put it in an ejs file
     res.send(`
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
+    <title>${packageName} - ${templateName}</title>
 	<script>
-	var SR = {components:{data:[]}};
+	var SR = {components:{data:${componentData}}};
+    
 	</script>
   </head>
   <body>
-  <div id='main'></div>
+  <div id='main'>${renderedPage}</div>
     ${scripts}
   </body>
 </html>
-  `);
+`);
 
 });
 

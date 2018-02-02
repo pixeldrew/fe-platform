@@ -1,10 +1,18 @@
 /* eslint-disable */
 
-var global = this;
-var self = this;
-var window = this;
-var process = {env: {}};
-var console = {};
+import 'babel-polyfill';
+
+import URLSearchParams from 'url-search-params';
+
+global.URLSearchParams = URLSearchParams;
+
+const self = global;
+const window = global;
+
+const process = {env: {}};
+const console = {};
+
+global.process = process;
 console.debug = print;
 console.warn = print;
 console.log = print;
@@ -12,28 +20,30 @@ console.error = print;
 console.trace = print;
 
 (function() {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-            || window[vendors[x]+'CancelRequestAnimationFrame'];
+    let lastTime = 0;
+    const vendors = ['ms', 'moz', 'webkit', 'o'];
+    for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[`${vendors[x]}RequestAnimationFrame`];
+        window.cancelAnimationFrame = window[`${vendors[x]}CancelAnimationFrame`]
+            || window[`${vendors[x]}CancelRequestAnimationFrame`];
     }
 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+    if (!window.requestAnimationFrame) {
+window.requestAnimationFrame = function(callback, element) {
+            const currTime = new Date().getTime();
+            const timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            const id = window.setTimeout(() => { callback(currTime + timeToCall); },
                 timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
+}
 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
+    if (!window.cancelAnimationFrame) {
+window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+}
 }());
 
 global.requestAnimationFrame = window.requestAnimationFrame;
