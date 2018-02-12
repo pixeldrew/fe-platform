@@ -21,14 +21,31 @@ A POC is required to decouple the platform javascript from a theme's implementat
 
 #### Webpack Build Benefits:
 * Server side Bundling (for both Node and Nashorn interpreter to allow for server side rendering)
-* Template (mediators) Bundling Produces CSS And can inline/process/copy style assets (images, fonts)
+* Template (mediators) Bundling Produces CSS. Webpack can also inline/process/copy style assets (images, fonts)
 * CSS is de-duplicated into a Common Layer (no more duplication of component styles across templates)
-* Local Development Hot Module Reloading with inline linting/error display
+* Local Development can support Hot Module Reloading with inline linting/error display
 * Tree Shaking of unused modules
+
+### Important Concepts To Be Aware Of:
+The build process has reliance on alias'. Using webpack resolve and npm resolve, you can use alias' to find psuedo 
+packages.
+
+The platform components define a "platform-theme" psuedo package which points to the theme folder in the current package. 
+In the cun-them it overrides the platform themes with it's own CSS. Look at the app.js and webpack.config.js to make 
+sure you're aware of how this works.
+
 
 ### Testing this POC
 This POC requires that a local npm repository is setup and a carnival-abg user/scope is added to it. A good private npm 
 repo is veradaccio, it has it's own docker install. (See instructions [here](https://github.com/verdaccio/verdaccio]))
+
+To not use a local npm repo you can set the version to a path URL in the package.json, ie:
+
+```json
+"dependencies": {
+    "@carnival-abg/platform": "file:../platform/"
+  },
+```
  
 ### Run
 ```sh
