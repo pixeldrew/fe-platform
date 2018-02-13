@@ -24,7 +24,7 @@
     "platform-theme": "./themes/cun"
   },
   "dependencies": {
-    "@carnival-abg/platform": "^1.0.0-alpha"
+    "@carnival-abg/platform": "file:../platform"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -92,6 +92,7 @@
     "rimraf": "^2.6.2",
     "style-loader": "^0.20.1",
     "url-loader": "^0.6.2",
+    "url-search-params": "^0.10.0",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
     "webpack-hot-middleware": "^2.21.0",

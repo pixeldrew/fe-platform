@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-undef */
-import '@carnival-abg/platform/dist/library/js/ssr/polyfill';
+import '@carnival-abg/platform/library/js/ssr/polyfill';
 import {createFactory} from 'react';
 import {renderToString, renderToStaticMarkup} from 'react-dom/server';
 

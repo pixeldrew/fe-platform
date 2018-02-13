@@ -150,7 +150,7 @@ module.exports = {
                     path.resolve(__dirname, 'components'),
                     path.resolve(themeLocation, 'styles'),
                     path.resolve(__dirname, 'node_modules', 'normalize.css'),
-                    path.resolve(__dirname, 'node_modules', '@carnival-abg', 'platform', 'dist')
+                    path.dirname(require.resolve('@carnival-abg/platform'))
                 ],
                 use: isDevelop ? [
                     {loader: 'style-loader', options: {sourceMap: true}},

@@ -1,9 +1,11 @@
 import React from 'react';
-import renderReact from '@carnival-abg/platform/dist/library/js/utils/renderReact';
+import {uniqBy} from 'lodash';
+
+import renderReact from '@carnival-abg/platform/library/js/utils/renderReact';
 
 import 'cunplatform-theme/styles/pages/aboutUs/index.css';
 
-import {Parent} from '@carnival-abg/platform';
+import {Parent, Page} from '@carnival-abg/platform';
 import {Child} from '@carnival-abg/cunplatform';
 
 const mediator = {
@@ -17,31 +19,42 @@ const mediator = {
 
     initReact() {
 
+        // TODO: Create a babel plugin
+        // Reads const _COMPONENTS={head:['<component id as string>'], body[]}
+        // in this function (initReact) and adds the correct import statements at the beginning of the mediator
+        // and converts:
+        // const _COMPONENTS = { head: [], body: ['Child', 'Fetching'] }
+        // to:
+
+        const _COMPONENTS = {
+            head: [],
+            body: [
+                {id: 'Parent', Component: Parent},
+                {id: 'Child', Component: Child}
+            ]
+        };
+
+        // Then adds this snipit to the page
+        const {head, body} = _COMPONENTS;
+
         if (process.env.NODE_ENV === 'development') {
 
             const render = require('react-dom').render;
             const AppContainer = require('react-hot-loader').AppContainer;
-            const Page = require('@carnival-abg/platform/dist/components/Page').default;
 
-            const headComponents = [];
-            const bodyComponents = [
-                {
-                    Component: Parent,
-                    properties: {attributes: {message: 'this is the about us page'}, component: 'Parent'}
-                },
-                {
-                    Component: Child,
-                    properties: {attributes: {message: 'a second child'}, component: 'Child'}
-                }
-            ];
+            [...head, ...body].forEach(definition => {
+                definition.properties = SR.components.data.find(model => model.type === definition.id) || {};
+            });
 
             render(
                 <AppContainer>
-                    <Page headComponents={headComponents} bodyComponents={bodyComponents}/>
+                    <Page headComponents={head} bodyComponents={body}/>
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(Parent, 'parent');
+
+            uniqBy([...head, ...body], 'id').forEach(({Component, id}) => renderReact(Component, id));
+
         }
     }
 
@@ -51,7 +64,7 @@ mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-    module.hot.accept(['@carnival-abg/cunplatform'], () => {
+    module.hot.accept(['@carnival-abg/cunplatform', '@carnival-abg/platform'], () => {
         mediator.init();
     });
 }
