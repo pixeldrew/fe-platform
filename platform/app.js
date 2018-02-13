@@ -100,7 +100,7 @@ chokidar.watch(['components/**/*.js', 'library/js/**/*.js'], {ignored: ['compone
 });
 
 // copy json and css to output
-chokidar.watch(['components/**/*.json', 'components/**/styles' ]).on('all', (event, filePath) => {
+chokidar.watch(['components/**/*.json', 'components/**/styles/*.css' ]).on('all', (event, filePath) => {
     const outputPath = path.resolve(__dirname, 'dist', filePath);
 
     mkdirp.sync(path.dirname(outputPath));
