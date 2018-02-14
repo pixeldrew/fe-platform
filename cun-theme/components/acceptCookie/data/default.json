@@ -1,0 +1,35 @@
+{
+    "type": "acceptCookie",
+    "id": "7234a6a",
+    "meta": {
+        "render": "dynamic"
+    },
+    "attributes": {
+    "title": "So Much to See and Do",
+    "textBlock": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia",
+    "infoCta":{
+      "label":"SALVA"
+    },
+    "image": {
+      "alt": "Seabourn shops",
+      "0": {
+        "1x": "http://placehold.it/365x416?text=Image+1x",
+        "2x": "http://placehold.it/730x832?text=Image+2x"
+      }
+    },
+    "childComponents": [{
+        "type": "titleH1",
+        "id": "4586883268354",
+        "meta": {
+          "render": "static"
+        },
+        "attributes": {
+          "title": "Politica sui Cookie",
+          "description": "",
+          "dividerType": "text",
+          "dividerText": ""
+        }
+      }
+    ]
+  }
+}

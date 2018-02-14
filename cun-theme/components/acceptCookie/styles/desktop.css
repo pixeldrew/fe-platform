@@ -1,0 +1,31 @@
+.accept-cookie {
+    & .title-component {
+        padding: 45px 0 0;
+    }
+
+    & .ten-col-container {
+        max-width: 75.33333333%;
+    }
+
+    & .two-col-container {
+        min-width: 20.66666667%;
+        max-width: 50%;
+        padding-top: 0;
+    }
+
+    & .contentTable table {
+        width: 100%;
+    }
+
+    & .content-container h4 {
+        margin-top: 2.2em;
+    }
+
+    & .cookie-check li {
+        margin: 2.4em 0 0;
+    }
+
+    & .cookie-check li:first-child {
+        margin: 2.4em 2.5em 0 0;
+    }
+}
