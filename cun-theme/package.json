@@ -29,7 +29,9 @@
     "postcss.config.js"
   ],
   "dependencies": {
-    "@carnival-abg/platform": "file:../platform"
+    "@carnival-abg/platform": "file:../platform",
+    "lodash": "^4.17.4",
+    "normalize.css": "^7.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

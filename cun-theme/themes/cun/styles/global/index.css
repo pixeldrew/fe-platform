@@ -1,4 +1,4 @@
-@include "normalize.css";
+@import "normalize.css";
 
 body {
     font-family: var(--font-body);
