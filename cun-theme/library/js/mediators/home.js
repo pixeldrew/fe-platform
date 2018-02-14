@@ -3,8 +3,9 @@ import {uniqBy} from 'lodash';
 
 import renderReact from '@carnival-abg/platform/library/js/utils/renderReact';
 
-import 'cunplatform-theme/styles/pages/home/index.css';
+import 'cun-platform-theme/styles/pages/home/index.css';
 
+import {AcceptCookie} from '@carnival-abg/cun-platform';
 import {Parent} from '@carnival-abg/platform';
 
 const mediator = {
@@ -28,7 +29,8 @@ const mediator = {
         const _COMPONENTS = {
             head: [],
             body: [
-                {id: 'Parent', Component: Parent}
+                {id: 'Parent', Component: Parent},
+                {id: 'AcceptCookie', Component: AcceptCookie}
             ]
         };
 
@@ -64,7 +66,7 @@ mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-    module.hot.accept(['@carnival-abg/cunplatform', '@carnival-abg/platform'], () => {
+    module.hot.accept(['@carnival-abg/cun-platform', '@carnival-abg/platform'], () => {
         mediator.init();
     });
 }

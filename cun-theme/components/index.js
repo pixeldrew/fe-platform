@@ -1,3 +1,5 @@
 import Child from './Child';
 
-export {Child};
+import AcceptCookie from './acceptCookie';
+
+export {Child, AcceptCookie};

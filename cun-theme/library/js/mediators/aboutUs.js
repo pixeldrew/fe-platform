@@ -3,10 +3,10 @@ import {uniqBy} from 'lodash';
 
 import renderReact from '@carnival-abg/platform/library/js/utils/renderReact';
 
-import 'cunplatform-theme/styles/pages/aboutUs/index.css';
+import 'cun-platform-theme/styles/pages/aboutUs/index.css';
 
 import {Parent, Page} from '@carnival-abg/platform';
-import {Child} from '@carnival-abg/cunplatform';
+import {Child} from '@carnival-abg/cun-platform';
 
 const mediator = {
     init() {
@@ -64,7 +64,7 @@ mediator.init();
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-    module.hot.accept(['@carnival-abg/cunplatform', '@carnival-abg/platform'], () => {
+    module.hot.accept(['@carnival-abg/cun-platform', '@carnival-abg/platform'], () => {
         mediator.init();
     });
 }

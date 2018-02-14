@@ -1,5 +1,6 @@
 import React from 'react';
 import renderReact from '../utils/renderReact';
+import {uniqBy} from 'lodash';
 
 import 'platform-theme/styles/pages/aboutUs/index.css';
 
@@ -16,32 +17,52 @@ const mediator = {
 
     initReact() {
 
+        // TODO: Create a babel plugin
+        // Reads const _COMPONENTS={head:['<component id as string>'], body[]}
+        // in this function (initReact) and adds the correct import statements at the beginning of the mediator
+        // and converts:
+        // const _COMPONENTS = { head: [], body: ['Child', 'Fetching'] }
+        // to:
+
+        const _COMPONENTS = {
+            head: [],
+            body: [
+                {
+                    Component: Parent,
+                    id: 'Parent'
+                },
+                {
+                    Component: Child,
+                    id: 'Child'
+                }
+            ]
+        };
+
+        // Then adds this snipit to the page
+        const {head, body} = _COMPONENTS;
+
         if (process.env.NODE_ENV === 'development') {
 
             const render = require('react-dom').render;
             const AppContainer = require('react-hot-loader').AppContainer;
-            const Page = require('../../../components/Page').default;
+            const Page = require('@carnival-abg/platform').Page;
 
-            const headComponents = [];
-            const bodyComponents = [
-                {
-                    Component: Parent,
-                    properties: {attributes: {message: 'this is the about us page'}, component: 'Parent'}
-                },
-                {
-                    Component: Child,
-                    properties: {attributes: {message: 'a second child'}, component: 'Child'}
-                }
-            ];
+            [...head, ...body].forEach(definition => {
+                definition.properties = SR.components.data.find(model => model.type === definition.id) || {};
+            });
 
             render(
                 <AppContainer>
-                    <Page headComponents={headComponents} bodyComponents={bodyComponents}/>
+                    <Page headComponents={head} bodyComponents={body}/>
                 </AppContainer>, document.querySelector('#main'));
 
         } else {
-            renderReact(Parent, 'parent');
+
+            uniqBy([...head, ...body], 'id').forEach(({Component, id}) => renderReact(Component, id));
+
         }
+
+
     }
 
 };

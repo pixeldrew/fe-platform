@@ -1,6 +1,163 @@
 /* holds all global variables, do not include CSS here as it will be included in every component */
 
+/*
+Media Queries
+---------------------------*/
+
+@custom-media --mobile-landscape (min-width: 481px);
+@custom-media --tablet ( min-width: 768px);
+@custom-media --tablet-landscape ( min-width: 981px);
+@custom-media --desktop ( min-width: 1025px);
+@custom-media --desktop-xl ( min-width: 1281px);
+
 :root {
+    --max-width: 1280px;
+    --max-width-full-bleed-image: 1920px;
+}
+
+:root {
+
+    /* Colors */
+    /* HAL colors */
+    --color-primary1: #FFFFFF; /* WHITE */
+    --color-primary2: #FBF9F8; /* OFFWHITE */
+    --color-primary3: #ABAFC0; /* LIGHT BLUE */
+    --color-primary4: #2B386F; /* MED. BLUE */
+    --color-primary5: #20285B; /* NAVY */
+    --color-primary6: #646363; /* GRAY */
+    --color-primary7: #F0EFEE; /* LIGHT GRAY */
+    --color-primary8: #b1b1b1; /* LIGHT GRAY */
+    --color-secondary1: #F3BF59; /* CANARY */
+    --color-secondary2: #52254A; /* GARNET */
+    --color-secondary3: #2D5E37; /* GREEN */
+    --color-secondary4: #CCCCCC; /* PATH GREY */
+    --color-secondary5: #2a5f38; /* DARK GREEN */
+    --color-tertiary1: #000;
+    --color-tertiary2: #fbfbfb;
+    --color-tertiary3: #808080;
+    --color-tertiary4: #d2d4de;
+    --color-tertiary5: #e6e7ec;
+    --color-tertiary6: #f2bf59;
+    --color-tertiary7: #5b6186;
+    --color-tertiary8: #4b5684;
+    --color-tertiary9: #705a57;
+    --color-tertiary10: #c9bdbd;
+    --color-tertiary11: #8c7976;
+    --color-tertiary12: #333333;
+    --color-tertiary13: #419be0;
+    --color-tertiary14: #268BD2;
+    --color-tertiary15: #dddfe6;
+    --color-tertiary16: #AEADBE;
+    --color-tertiary17: #d6d8e3;
+    --color-tertiary18: #161819;
+    --color-tertiary19: #F0EFED;
+    --color-tertiary20: #cacad5;
+    --color-tertiary21: #d9d9d9;
+    --color-tertiary22: #d5d7df;
+    --color-tertiary23: #838aaa;
+    --color-tertiary24: #fcfcfc;
+    --color-tertiary25: #55608c;
+    --color-tertiary26: #959cb7;
+    --color-tertiary27: #d5d7e0;
+    --color-tertiary28: #bb9c67;
+    --color-tertiary29: #FF0000;
+    --color-tertiary30: #f4f3f3;
+    --color-tertiary31: #304153;
+    --color-tertiary32: #606060;
+    --color-tertiary33: #750003;
+    --color-tertiary34: #faf9f7;
+    --color-tertiary35: #c9c9c9;
+    --color-tertiary36: #9d9b9b;
+    --color-tertiary37: #a6aabb;
+    --color-tertiary41: #ffff00;
+    --color-tertiary42: #c0c0c0;
+    --color-tertiary44: #F2F2F2;
+    --color-tertiary45: #ebe7e2;
+    --color-tertiary45-opacity0: rgba(235, 231, 226, 0);
+    --color-tertiary46: #656f66;
+    --color-tertiary47: #c3c3c3;
+    --color-tertiary48: #c8c8c8;
+    --color-tertiary49: #bfbfbf;
+    --color-tertiary50: #e9eaee;
+    --color-tertiary51: #585f69;
+    --color-tertiary52: #d9dae2;
+    --color-tertiary53: #303d72;
+    --color-tertiary54: #a1a1a2;
+    --color-tertiary55: #757575;
+    --color-tertiary56: #767676;
+    --color-tertiary57: #727a9f;
+    --color-tertiary58: #858aa5;
+    --color-tertiary59: #414c7e;
+    --color-tertiary61: #e1e5f2;
+    --color-tertiary62: #f4f4f4;
+    --color-tertiary63: #dedddd;
+    --color-tertiary64: #f8f6f5;
+    --color-tertiary65: #6e6d6d;
+    --color-tertiary66: #008000;
+    --color-tertiary67: #59648e;
+    --color-tertiary68: #aaaaaa;
+    --color-tertiary69: #a6c7ff;
+    --color-tertiary70: #989eb9;
+    --color-tertiary71: #20258b;
+    --color-tertiary72: #d4d6e1;
+    --color-tertiary73: #e1f4fd;
+    --color-lazyload-bg: #f3f3f3;
+
+    /* Fonts */
+    /* HAL Fonts */
+    --font-h1: 'Sabon-roman';
+    --font-h2: 'Sabon-roman';
+    --font-h3: 'Sabon-roman';
+    --font-h4: 'NeutraDisplay-medium';
+    --font-h4-demi: 'NeutraText-demi';
+    --font-h5: 'NeutraDisplay-bold';
+    --font-body1: 'NeutraText-book';
+    --font-body1-demi: 'NeutraText-demi';
+    --font-body2: 'NeutraText-book';
+    --font-body2-demi: 'NeutraText-demi';
+    --font-body3: 'NeutraText-book';
+    --font-body3-text-demi: 'NeutraText-demi';
+    --font-small-text: 'NeutraText-book';
+    --font-cta: 'NeutraDisplay-bold';
+    --font-cta-light: 'NeutraText-light';
+    --font-cta-medium: 'NeutraDisplay-medium';
+    --font-cta-sabon: 'Sabon-roman';
+    --font-cta-demi: 'NeutraText-demi';
+    --font-cta-SabonLTStd-Italic: 'Sabon-italic';
+    --font-cta-book: 'NeutraText-book';
+    --font-italic: 'Sabon-italic';
+    --font-bold: 'NeutraText-bold';
+    --font-legend: 'NeutraDisplay-bold';
+    --font-neutra-text-bold: 'NeutraText-bold';
+    --font-neutra-text-demi: 'NeutraText-demi';
+    --font-icomoon: 'Icomoon';
+
+    /* Opaque backgrounds */
+    --opaque-background1: rgba(0, 0, 0, .3); /* LIGHT BLACK */
+    --opaque-background2: rgba(0, 0, 0, .54); /* DARK BLACK */
+    --opaque-background4: rgba(0, 0, 0, .75); /* DEEP BLACK */
+    --opaque-background3: rgba(255, 255, 255, .3); /* WHITE */
+    --opaque-background5: rgba(0, 0, 0, .9); /* Media Image Background*/
+    --opaque-background6: rgba(32, 40, 91, .8); /* DEEP BLUE */
+    --opaque-background7: rgba(32, 40, 91, .54); /* OVERLAY BLUE */
+
+    /* Icons */
+    --icon-check : '../../../images/check.png';
+
+    /* BLUE outline on focus */
+    --color-focus: rgb(59, 153, 252);
+
+    /* Gradient */
+    /* --gradient-primary1: rgba(0, 0, 0, 0.1); */
+    --gallery-gradient-transparent-dark: linear-gradient(to bottom, transparent 50%, rgba(32, 40, 91, .22) 65%, rgba(18, 22, 51, .8) 100%);
+    --gallery-gradient-dark-transparent: linear-gradient(to bottom, rgba(18, 22, 51, .8) 50%, rgba(32, 40, 91, .22) 65%, transparent 100%);
+    --gradient-image: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0.2) 59%, transparent 100%);
+    --gradient-image-cruise: linear-gradient(to bottom, rgba(18, 22, 51, .8) 0%, rgba(32, 40, 91, .22) 65%, transparent 100%);
+    --gradient-white: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 76%, rgba(255, 255, 255, 1) 100%);
+    --gradient-white1: linear-gradient(to bottom, rgba(255, 255, 255, 0) 30px, rgba(255, 255, 255, 1) 100%);
+    --color-image-overlay: rgba(0, 0, 0, 0.5);
+    --gradient-image-hero: linear-gradient(to top, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, .22) 37%, transparent 100%);
+
     --font-body: 'Helvetica';
     /* do not use css sets */
     --style-h1 {
@@ -8,5 +165,9 @@
         font-size: 40px;
         color: var(--color-primary1);
         font-weight: normal;
+    };
+
+    --box-sizing {
+        box-sizing: border-box;
     };
 }

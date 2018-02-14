@@ -2,6 +2,14 @@
   "env": {
     "production": {
       "plugins": [
+        "transform-runtime",
+        [
+          "transform-object-rest-spread",
+          {
+            "useBuiltIns": true
+          }
+        ],
+        "transform-class-properties",
         "transform-react-inline-elements",
         "transform-react-constant-elements",
         "transform-react-remove-prop-types"
@@ -18,7 +26,17 @@
           }
         ]
       ],
-      "plugins": ["istanbul"]
+      "plugins": [
+        "transform-runtime",
+        [
+          "transform-object-rest-spread",
+          {
+            "useBuiltIns": true
+          }
+        ],
+        "transform-class-properties",
+        "istanbul"
+      ]
     }
   },
   "plugins": [
@@ -28,7 +46,8 @@
       {
         "useBuiltIns": true
       }
-    ]
+    ],
+    "transform-class-properties"
   ],
   "presets": [
     "react",
