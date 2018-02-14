@@ -36,8 +36,10 @@ sure you're aware of how this works.
 
 
 ### Testing this POC
-This POC requires that a local npm repository is setup and a carnival-abg user/scope is added to it. A good private npm 
-repo is veradaccio, it has it's own docker install. (See instructions [here](https://github.com/verdaccio/verdaccio]))
+~~This POC requires that a local npm repository is setup and a carnival-abg user/scope is added to it. A good private npm 
+repo is veradaccio, it has it's own docker install. (See instructions [here](https://github.com/verdaccio/verdaccio]))~~
+
+Default is set as file reference
 
 To not use a local npm repo you can set the version to a path URL in the package.json, ie:
 
@@ -79,3 +81,5 @@ Port v1 platform components to new build process by:
 * Implement new build setup
 * Add ability in AEM to identify which theme to use per template
 * Refactor Nashorn renderer to load theme sepcific SSR bundle and render theme specific component
+* Finish tasks in platform/.plan so that data can be loaded by the app server by reading the mediator as an AST and parsing the 
+* imports to load component specific JSON

@@ -4,8 +4,9 @@ const PORT = process.env.PORT || 3033;
 const BRAND = process.env.BRAND || 'whitelabel';
 
 const moduleAlias = require('module-alias');
+const { camelCase } = require('lodash');
 
-const packageName = require('./package.json').name.split('/')[1];
+const packageName = camelCase(require('./package.json').name.split('/').pop());
 
 // path where content lives in AEM
 const publicPath = `/etc/designs/${packageName}/`;
@@ -28,8 +29,10 @@ const clearRequire = require('clear-require');
 const app = express();
 const wpCompiler = webpack(wpConfig);
 
+const themeLocation = path.resolve(__dirname, 'themes', BRAND);
+
 // important alias
-moduleAlias.addAlias('platform-theme', path.resolve(__dirname, 'themes', BRAND));
+moduleAlias.addAlias('platform-theme', themeLocation);
 require('ignore-styles').default(['.css']);
 
 app.use(wpMiddleware(wpCompiler, {
@@ -39,7 +42,7 @@ app.use(wpMiddleware(wpCompiler, {
 
 app.use(wpHotMiddleware(wpCompiler));
 
-app.use(publicPath, express.static(path.resolve(__dirname, 'dist')));
+app.use(publicPath, express.static(themeLocation, {fallthrough: true}));
 
 const normalizeAssets = assets => (Array.isArray(assets) ? assets : [assets]);
 
@@ -47,9 +50,15 @@ app.use('/template/:templateName', (req, res) => {
 
     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
 
+    const componentData = '[]';
+
+    const renderedPage = '';
+
+    const {templateName} = req.params;
+
     const scripts = Object.entries(assetsByChunkName)
         .map(([k, p]) => ([k, normalizeAssets(p)]))
-        .filter(([k, p]) => p.indexOf(`js/mediators/${req.params.templateName}.js`) + 1)
+        .filter(([k, p]) => p.indexOf(`js/mediators/${templateName}.js`) + 1)
         .map(([k, p]) => (p.map(p1 => `<script data-webkit-id="${k}" src="/${p1}"></script>`).join('\n')))
         .join('');
 
@@ -60,15 +69,18 @@ app.use('/template/:templateName', (req, res) => {
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
-	<script>var SR = {components:{data:[]}};</script>
+    <title>${packageName} - ${templateName}</title>
+	<script>
+	var SR = {components:{data:${componentData}}};
+    
+	</script>
   </head>
   <body>
-  <div id='main'></div>
+  <div id='main'>${renderedPage}</div>
     ${scripts}
   </body>
 </html>
-  `);
+`);
 
 });
 
@@ -91,7 +103,7 @@ chokidar.watch(['components/**/*.js', 'library/js/**/*.js'], {ignored: ['compone
 });
 
 // copy json and css to output
-chokidar.watch(['components/**/*.json', 'components/**/styles' ]).on('all', (event, filePath) => {
+chokidar.watch(['components/**/*.json', 'components/**/styles/*.css' ]).on('all', (event, filePath) => {
     const outputPath = path.resolve(__dirname, 'dist', filePath);
 
     mkdirp.sync(path.dirname(outputPath));

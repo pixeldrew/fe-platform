@@ -4,8 +4,9 @@ const PORT = process.env.PORT || 3033;
 const BRAND = process.env.BRAND || 'whitelabel';
 
 const moduleAlias = require('module-alias');
+const { camelCase } = require('lodash');
 
-const packageName = require('./package.json').name.split('/')[1];
+const packageName = camelCase(require('./package.json').name.split('/').pop());
 
 // path where content lives in AEM
 const publicPath = `/etc/designs/${packageName}/`;
@@ -28,8 +29,10 @@ const clearRequire = require('clear-require');
 const app = express();
 const wpCompiler = webpack(wpConfig);
 
+const themeLocation = path.resolve(__dirname, 'themes', BRAND);
+
 // important alias
-moduleAlias.addAlias('platform-theme', path.resolve(__dirname, 'themes', BRAND));
+moduleAlias.addAlias('platform-theme', themeLocation);
 require('ignore-styles').default(['.css']);
 
 app.use(wpMiddleware(wpCompiler, {
@@ -39,7 +42,7 @@ app.use(wpMiddleware(wpCompiler, {
 
 app.use(wpHotMiddleware(wpCompiler));
 
-app.use(publicPath, express.static(path.resolve(__dirname, 'dist')));
+app.use(publicPath, express.static(themeLocation, {fallthrough: true}));
 
 const normalizeAssets = assets => (Array.isArray(assets) ? assets : [assets]);
 
@@ -47,8 +50,6 @@ app.use('/template/:templateName', (req, res) => {
 
     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
 
-    // TODO: Use the Babel AST to read the contents of the mediator searching for mediator.initReact _COMPONENTS
-    // Then find test data and collect it as an array of test data
     const componentData = '[]';
 
     const renderedPage = '';
@@ -61,6 +62,8 @@ app.use('/template/:templateName', (req, res) => {
         .map(([k, p]) => (p.map(p1 => `<script data-webkit-id="${k}" src="/${p1}"></script>`).join('\n')))
         .join('');
 
+    // TODO: Use the Babel AST to read the contents of the mediator searching for mediator.initReact TEMPLATE_COMPONENTS
+    // add the data to the SR object
     // TODO: Strip this out and put it in an ejs file
     res.send(`
 <!DOCTYPE html>

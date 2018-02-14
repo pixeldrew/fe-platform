@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const {camelCase} = require('lodash');
 
 // process ENV
 const env = process.env;
@@ -10,7 +11,7 @@ const NODE_ENV = env.NODE_ENV || 'development';
 const BRAND = env.BRAND || 'whitelabel';
 
 const alias = require('./webpack.aliases')(BRAND, 'dist');
-const packageName = require('./package.json').name.split('/')[1];
+const packageName = camelCase(require('./package.json').name.split('/').pop());
 
 const aem = {
 

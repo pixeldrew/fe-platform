@@ -3,14 +3,15 @@
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const {camelCase} = require('lodash');
 
 // process ENV
 const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
-const BRAND = env.BRAND || 'cun';
+const BRAND = env.BRAND || 'whitelabel';
 
 const alias = require('./webpack.aliases')(BRAND, 'dist');
-const packageName = require('./package.json').name.split('/')[1];
+const packageName = camelCase(require('./package.json').name.split('/').pop());
 
 const aem = {
 
@@ -33,7 +34,7 @@ const aem = {
 
     plugins: [
 
-        // used to disable css modules
+        // disables css styles required in modules from being converted
         new webpack.NormalModuleReplacementPlugin(
             /\.css$/,
             require.resolve('@carnival-abg/platform/dist/library/js/ssr/null-style')

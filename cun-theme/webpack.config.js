@@ -5,6 +5,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
+const { camelCase } = require('lodash');
+
+const packageName = camelCase(require('./package.json').name.split('/').pop());
 
 // process images in assets to this quality
 const imageQuality = 85;
@@ -13,19 +16,19 @@ const imageQuality = 85;
 const env = process.env;
 const NODE_ENV = env.NODE_ENV || 'development';
 const SOURCE_MAPS = env.SOURCE_MAPS;
-const BRAND = env.BRAND || 'cun';
+const BRAND = env.BRAND || 'whitelabel';
 
 const alias = require('./webpack.aliases')(BRAND);
 
 // path where content lives in AEM
-const publicPath = `/etc/designs/${BRAND}/`;
+const publicPath = `/etc/designs/${packageName}/`;
 const brandSrcDir = path.resolve(__dirname, 'themes', BRAND);
 const shareModuleAfter = 2;
 const maxFileSizeToInline = 8192; // 8.192kb
 
 const isDevelop = NODE_ENV === 'development';
 const sourceMaps = SOURCE_MAPS || isDevelop;
-const aemPath = path.resolve(__dirname, 'dist', 'jcr_root', 'etc', 'designs', BRAND);
+const aemPath = path.resolve(__dirname, 'dist', 'jcr_root', 'etc', 'designs', packageName);
 const mediatorDir = path.resolve(__dirname, 'library', 'js', 'mediators');
 const themeLocation = path.resolve(__dirname, 'themes', BRAND);
 
@@ -52,7 +55,7 @@ fs.readdirSync(mediatorDir).forEach(file => {
 
 });
 
-// add in global Includes
+// add global include to mediators
 entry = Object.entries(entry).map(([key, value]) => [key, [...globalIncludes, ...value]]).reduce((a, v) => {
     a[v[0]] = v[1];
     return a;
@@ -94,7 +97,7 @@ module.exports = {
                     loader: 'url-loader',
                     options: {
                         limit: maxFileSizeToInline,
-                        name: file => (file.split(`${BRAND}/`)[1]),
+                        name: file => (file.split(`${BRAND}/`).pop()),
                         publicPath
                     }
                 }
@@ -118,7 +121,7 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: maxFileSizeToInline,
-                            name: file => (file.split(`${BRAND}/`)[1]),
+                            name: file => (file.split(`${BRAND}/`).pop()),
                             publicPath
                         }
                     }
@@ -128,7 +131,7 @@ module.exports = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'components'),
-                    path.resolve(__dirname, 'library', 'js'),
+                    path.resolve(__dirname, 'library', 'js')
                 ],
                 exclude: [
                     path.resolve(__dirname, 'library', 'js', 'vendor')
@@ -214,4 +217,3 @@ module.exports = {
         entrypoints: true
     }
 };
-

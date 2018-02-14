@@ -11,13 +11,13 @@
     "bundle-mediators": "webpack -p",
     "bundle-ssr": "webpack --config webpack.ssr.config.js",
     "clean": "rimraf dist/",
-    "compile-components": "babel components --out-dir dist/components --ignore components/**/test/*",
-    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/vendor/",
+    "compile-components": "babel components --out-dir dist/components --ignore **/test",
+    "compile-js": "babel library/js --out-dir dist/library/js --ignore library/js/vendor",
     "copy-assets": "copyfiles components/**/*.css components/**/*.json dist/",
     "coverage": "bnr coverage",
-    "profile-build": "bnr profile",
+    "profile-build": "bnr profile-build",
     "prepare": "bnr build",
-    "start": "nodemon -w app.js -w webpack.config.js app.js",
+    "start": "BRAND=whitelabel nodemon -w app.js -w webpack.config.js app.js",
     "test": "bnr test"
   },
   "publishConfig": {
@@ -116,24 +116,28 @@
     "build": {
       "command": "run-s clean compile-components copy-assets compile-js bundle-mediators bundle-ssr",
       "env": {
+        "BRAND": "whitelabel",
         "NODE_ENV": "production"
       }
     },
     "coverage": {
       "command": "nyc --all --cache -- mocha --ui tdd --require ./mocha-setup.js ./components/**/test/index.js",
       "env": {
+        "BRAND": "cun",
         "NODE_ENV": "test"
       }
     },
     "profile-build": {
       "command": "webpack -p --profile --json > reports/webpack-stats.json",
       "env": {
+        "BRAND": "whitelabel",
         "NODE_ENV": "production"
       }
     },
     "test": {
       "command": "mocha --require babel-core/register --ui tdd --require ./mocha-setup.js ./components/**/test/index.js",
       "env": {
+        "BRAND": "whitelabel",
         "NODE_ENV": "test"
       }
     }
